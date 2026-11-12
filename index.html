@@ -166,7 +166,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .f-green{--anim:sway;--dur:4.2s;--delay:-.9s;--ox:50%;--oy:92%;--r:-1.3deg}
 .f-yellow{--anim:sway;--dur:3.4s;--delay:-2.6s;--ox:73%;--oy:50%;--r:2.6deg}
 .f-orange{--anim:sway;--dur:3.9s;--delay:-1.7s;--ox:88%;--oy:58%;--r:-2.6deg}
-.logo img{--k:1}
+.logo img{--k:1.8}
 @keyframes sway{from{transform:rotate(calc(var(--r)*var(--k)*-1))}to{transform:rotate(calc(var(--r)*var(--k)))}}
 @keyframes swayUp{from{transform:rotate(calc(var(--r)*var(--k)*-1)) translateY(calc(.6%*var(--k)))}to{transform:rotate(calc(var(--r)*var(--k))) translateY(calc(-.8%*var(--k)))}}
 @keyframes reach{from{transform:scaleY(calc(1 - .015*var(--k))) rotate(calc(var(--r)*var(--k)*-1))}to{transform:scaleY(calc(1 + .03*var(--k))) rotate(calc(var(--r)*var(--k)))}}
@@ -250,7 +250,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .bw-logo{position:relative;width:92%;margin:4% auto;aspect-ratio:950/590}
 .bw-logo img{position:absolute;inset:0;width:100%;height:100%;
   animation:var(--anim) calc(var(--dur)*.9) ease-in-out var(--delay) infinite alternate;
-  transform-origin:var(--ox) var(--oy);will-change:transform;--k:2.1}
+  transform-origin:var(--ox) var(--oy);will-change:transform;--k:3}
 
 .footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;
   padding:18px 0 calc(26px + var(--safe-b));font-size:11px;text-transform:uppercase;font-weight:500}
@@ -397,12 +397,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   <div class="wrap">
     <div class="big-logo"><div class="bw-logo" role="img" aria-label="ZWO">
-      <img class="f-purple" src="bw-purple.png" alt="">
-      <img class="f-red"    src="bw-red.png"    alt="">
-      <img class="f-pink"   src="bw-pink.png"   alt="">
-      <img class="f-green"  src="bw-green.png"  alt="">
-      <img class="f-yellow" src="bw-yellow.png" alt="">
-      <img class="f-orange" src="bw-orange.png" alt="">
+      <img class="f-purple" src="fig-purple.png" alt="">
+      <img class="f-red"    src="fig-red.png"    alt="">
+      <img class="f-pink"   src="fig-pink.png"   alt="">
+      <img class="f-green"  src="fig-green.png"  alt="">
+      <img class="f-yellow" src="fig-yellow.png" alt="">
+      <img class="f-orange" src="fig-orange.png" alt="">
     </div></div>
     <a class="scroll-hint mono" href="#tickets">↓ Tickets</a>
     <div class="marquee" aria-hidden="true"><div class="mono" id="mq"></div></div>
