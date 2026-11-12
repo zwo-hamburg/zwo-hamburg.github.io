@@ -201,6 +201,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 .tickets{display:grid;grid-template-columns:1fr;gap:18px;padding:26px 0 30px}
 @media(min-width:760px){.tickets{grid-template-columns:1fr 1fr}}
+.notify{border:1px solid var(--bw-line);padding:22px 20px 20px;margin:26px 0 4px;background:#fff}
+.notify-tag{display:inline-block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;background:#000;color:#fff;padding:5px 10px 4px}
+.notify h2{font-size:clamp(28px,8vw,40px);font-weight:700;letter-spacing:-.03em;line-height:1;margin:14px 0 8px}
+.notify-text{font-size:14px;line-height:1.45;color:#333;margin-bottom:10px;max-width:460px}
+.notify form{max-width:460px}
+.notify-small{font-size:10.5px;line-height:1.45;color:#666;margin-top:10px}
+.notify-msg{font-size:11px;letter-spacing:.06em;margin-top:10px;min-height:1em}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.pill.soon{opacity:.45;cursor:default;pointer-events:none}
 .badge-txt{color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;text-align:center;line-height:1.3}
 
 .ticket{display:flex;border:1px solid var(--bw-line);min-height:190px;position:relative;background:#fff}
@@ -400,8 +409,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
     <div class="hero" id="tickets">
       <h1>Tickets</h1>
-      <p>ZWO – Silvester. 31.12.2026, ab 23.59 Uhr.<br>Otto-Ernst-Straße 32, Hamburg.<br>Early Bird: Einlass bis 1:00 Uhr.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.</p>
+      <p>ZWO – Silvester. 31.12.2026, ab 23.59 Uhr.<br>Otto-Ernst-Straße 32, Hamburg.<br>Early Bird: Einlass bis 1:00 Uhr.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.<br><b id="saleNote">Tickets sind noch nicht erhältlich.</b></p>
     </div>
+
+    <section class="notify" id="notify">
+      <p class="notify-tag mono">Noch nicht im Verkauf</p>
+      <h2>Tickets gibt es bald.</h2>
+      <p class="notify-text">Trag deine E-Mail-Adresse ein – wir schreiben dir, sobald die Tickets online sind.</p>
+      <form id="notifyForm" novalidate>
+        <label class="field" id="fNotify"><span>E-Mail-Adresse</span>
+          <input id="notifyMail" name="EMAIL" type="email" autocomplete="email" inputmode="email" placeholder="max@beispiel.de" required>
+        </label>
+        <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+        <input type="hidden" name="locale" value="de">
+        <button class="pill solid wide" type="submit" id="notifyBtn">Benachrichtige mich</button>
+        <p class="notify-small">Wir nutzen deine Adresse nur, um dir Bescheid zu geben, wenn die Tickets online sind. Abmelden geht jederzeit.</p>
+        <p class="notify-msg mono" id="notifyMsg" role="status"></p>
+      </form>
+    </section>
 
     <div class="tickets">
       <article class="ticket">
@@ -490,6 +515,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    EINSTELLUNGEN – Ticketshop (pretix)
    ================================================================== */
 const SHOP_URL = "https://pretix.eu/ZWO/SILVESTER/";
+
+// Verkauf gestartet?  false = "Noch nicht im Verkauf" + E-Mail-Benachrichtigung
+//                     true  = Buy-now-Buttons aktiv
+const TICKETS_ON_SALE = false;
+
+// Adresse des Anmeldeformulars beim Newsletter-Dienst (z. B. Brevo).
+// Leer lassen, solange der Dienst noch nicht eingerichtet ist.
+const NOTIFY_FORM_URL = "";
 const TICKETS = {
   early:  { id: "1211536", name: "Early Bird Ticket", price: "10 €", note: "Einlass bis 1:00 Uhr" },
   normal: { id: "1211535", name: "Normales Ticket",   price: "15 €", note: "31.12.2026 · ab 23.59 Uhr" }
@@ -578,6 +611,33 @@ $("step1").addEventListener("submit", e => {
   goStep(2);
 });
 $("back2").addEventListener("click", () => goStep(1));
+
+/* ---------- Verkauf noch nicht gestartet ---------- */
+if (!TICKETS_ON_SALE) {
+  document.querySelectorAll("[data-ticket]").forEach(b => { b.textContent = "Bald"; b.classList.add("soon"); b.tabIndex = -1; });
+  document.querySelector(".scroll-hint").textContent = "↓ Tickets bald";
+} else {
+  $("notify").remove();
+  $("saleNote").remove();
+}
+
+$("notifyForm") && $("notifyForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const mail = $("notifyMail").value.trim(), msg = $("notifyMsg");
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
+  $("fNotify").classList.toggle("err", !ok);
+  if (!ok) return;
+  if (!NOTIFY_FORM_URL) { msg.textContent = "Die Anmeldung wird gerade eingerichtet – bitte versuch es bald noch einmal."; return; }
+  $("notifyBtn").disabled = true; msg.textContent = "Wird gesendet …";
+  try {
+    await fetch(NOTIFY_FORM_URL, { method: "POST", mode: "no-cors", body: new FormData(e.target) });
+    msg.textContent = "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben.";
+    e.target.reset();
+  } catch (err) {
+    msg.textContent = "Das hat leider nicht geklappt. Bitte versuch es noch einmal.";
+  }
+  $("notifyBtn").disabled = false;
+});
 
 /* Bezahlen: öffnet den pretix-Shop mit Ticket + Daten schon ausgefüllt */
 $("payBtn").addEventListener("click", () => {
