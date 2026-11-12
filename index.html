@@ -422,6 +422,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         </label>
         <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
         <input type="hidden" name="locale" value="de">
+        <input type="hidden" name="html_type" value="simple">
         <button class="pill solid wide" type="submit" id="notifyBtn">Benachrichtige mich</button>
         <p class="notify-small">Wir nutzen deine Adresse nur, um dir Bescheid zu geben, wenn die Tickets online sind. Abmelden geht jederzeit.</p>
         <p class="notify-msg mono" id="notifyMsg" role="status"></p>
@@ -522,7 +523,7 @@ const TICKETS_ON_SALE = false;
 
 // Adresse des Anmeldeformulars beim Newsletter-Dienst (z. B. Brevo).
 // Leer lassen, solange der Dienst noch nicht eingerichtet ist.
-const NOTIFY_FORM_URL = "";
+const NOTIFY_FORM_URL = "https://d0937c4f.sibforms.com/serve/MUIFAB9OjzvL8DaGJHXqOW5JyDili5RBsXNoTrNQjrXpdkQ1rmY8Kn_-zhOsdRUw9XDgP5Hoa0N8eW72eUlJxIWpJ1E5ZObK0BTKeASBm0bzqhRPKz96pHIpNLoc6mzjfa7H_KeULvQ2Nscsayuz1FyGRhFFr3U9n6uoboKNbW8J33ngFjbFCcPYNp-Ioh4BgC7uHigGlBk8WAL-zw==";
 const TICKETS = {
   early:  { id: "1211536", name: "Early Bird Ticket", price: "10 €", note: "Einlass bis 1:00 Uhr" },
   normal: { id: "1211535", name: "Normales Ticket",   price: "15 €", note: "31.12.2026 · ab 23.59 Uhr" }
@@ -632,7 +633,7 @@ $("notifyForm") && $("notifyForm").addEventListener("submit", async e => {
   if (!NOTIFY_FORM_URL) { msg.textContent = "Die Anmeldung wird gerade eingerichtet – bitte versuch es bald noch einmal."; return; }
   $("notifyBtn").disabled = true; msg.textContent = "Wird gesendet …";
   try {
-    await fetch(NOTIFY_FORM_URL, { method: "POST", mode: "no-cors", body: new FormData(e.target) });
+    await fetch(NOTIFY_FORM_URL, { method: "POST", mode: "no-cors", body: new URLSearchParams(new FormData(e.target)) });
     msg.textContent = "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben.";
     e.target.reset();
   } catch (err) {
