@@ -8,6 +8,9 @@
 <meta name="theme-color" content="#080808" id="themeColor">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<!-- pretix (Ticketshop) -->
+<link rel="stylesheet" type="text/css" href="https://pretix.eu/ZWO/SILVESTER/widget/v2.css" crossorigin>
+<script type="text/javascript" src="https://pretix.eu/widget/v2.de.js" async crossorigin></script>
 <style>
 /* ==================================================================
    FARBEN
@@ -197,7 +200,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero p{margin-top:12px;max-width:430px;font-size:13px;line-height:1.45;color:#333}
 
 .tickets{display:grid;grid-template-columns:1fr;gap:18px;padding:26px 0 10px}
-@media(min-width:760px){.tickets{grid-template-columns:minmax(0,600px)}}
+@media(min-width:760px){.tickets{grid-template-columns:1fr 1fr}}
+.badge-txt{color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;text-align:center;line-height:1.3}
 
 .ticket{display:flex;border:1px solid var(--bw-line);min-height:190px;position:relative;background:#fff}
 .t-main{flex:1;padding:18px 18px 16px 20px;display:flex;flex-direction:column}
@@ -269,6 +273,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .field input::placeholder{color:#b5b5b5}
 .field.err{border-color:#c00}.field.err span::after{content:" – bitte prüfen";color:#c00}
 .summary{display:flex;justify-content:space-between;border:1px solid var(--bw-line);padding:14px 16px;margin-bottom:16px;font-size:14px}
+.step h3 + .summary{margin-top:18px}
 .summary .who{font-size:11px;color:#555;margin-top:3px}
 .pay{display:grid;gap:10px;margin-bottom:12px}
 .pay label{display:flex;align-items:center;gap:14px;border:1px solid var(--bw-line);padding:16px;cursor:pointer;transition:background .15s}
@@ -381,26 +386,45 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="wrap">
     <div class="hero">
       <h1>Tickets</h1>
-      <p>ZWO – Silvester. 31.12.2026, ab 23.59 Uhr.<br>Otto-Ernst-Straße 32, Hamburg.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.</p>
+      <p>ZWO – Silvester. 31.12.2026, ab 23.59 Uhr.<br>Otto-Ernst-Straße 32, Hamburg.<br>Early Bird: Einlass bis 1:00 Uhr.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.</p>
     </div>
 
     <div class="tickets">
       <article class="ticket">
         <div class="t-main">
           <div class="t-head">
-            <div><h2>Silvester<br>Ticket</h2><p class="t-sub">31.12.2026 · ab 23.59</p></div>
-            <div class="badge" aria-hidden="true"><i></i></div>
+            <div><h2>Early Bird</h2><p class="t-sub">31.12.2026 · Einlass bis 1:00 Uhr</p></div>
+            <div class="badge badge-txt mono" aria-hidden="true">Early<br>Bird</div>
           </div>
           <hr>
-          <p class="t-price" id="priceLabel">10 €</p>
+          <p class="t-price" data-price="early">10 €</p>
           <div class="t-foot">
-            <p class="t-small">1 Person · Einlass mit QR-Code · Ticket per E-Mail</p>
-            <button class="pill" id="buyNow">Buy now</button>
+            <p class="t-small">Einlass nur bis 1:00 Uhr · Ticket per E-Mail</p>
+            <button class="pill" data-ticket="early">Buy now</button>
           </div>
         </div>
         <div class="t-stub" aria-hidden="true">
           <span class="t-vert">Otto-Ernst-Str. 32<br>Hamburg</span>
-          <svg class="barcode" id="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
+          <svg class="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+
+      <article class="ticket">
+        <div class="t-main">
+          <div class="t-head">
+            <div><h2>Normales<br>Ticket</h2><p class="t-sub">31.12.2026 · ab 23.59 Uhr</p></div>
+            <div class="badge" aria-hidden="true"><i></i></div>
+          </div>
+          <hr>
+          <p class="t-price" data-price="normal">15 €</p>
+          <div class="t-foot">
+            <p class="t-small">1 Person · Einlass mit QR-Code · Ticket per E-Mail</p>
+            <button class="pill" data-ticket="normal">Buy now</button>
+          </div>
+        </div>
+        <div class="t-stub" aria-hidden="true">
+          <span class="t-vert">Otto-Ernst-Str. 32<br>Hamburg</span>
+          <svg class="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
         </div>
       </article>
     </div>
@@ -427,12 +451,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <div class="sheet" id="sheet" aria-hidden="true">
   <div class="panel" role="dialog" aria-modal="true" aria-label="Ticket kaufen">
     <div class="panel-head">
-      <div class="steps mono"><span class="on" data-s="1"><b>01</b>Daten</span><span data-s="2"><b>02</b>Zahlung</span><span data-s="3"><b>03</b>Ticket</span></div>
+      <div class="steps mono"><span class="on" data-s="1"><b>01</b>Daten</span><span data-s="2"><b>02</b>Zahlung</span></div>
       <button class="close" id="closeSheet" aria-label="Schließen">×</button>
     </div>
 
     <form class="step on" id="step1" novalidate>
       <h3>Deine Daten</h3>
+      <div class="summary"><div><div id="sumName1"></div><div class="who" id="sumNote1"></div></div><b id="sumPrice1"></b></div>
       <p class="lead">Dein Name steht auf dem Ticket. Das Ticket schicken wir an deine E-Mail-Adresse.</p>
       <label class="field" id="fName"><span>Vor- und Nachname</span><input id="inName" type="text" autocomplete="name" placeholder="Max Mustermann" required></label>
       <label class="field" id="fMail"><span>E-Mail-Adresse</span><input id="inMail" type="email" autocomplete="email" inputmode="email" placeholder="max@beispiel.de" required></label>
@@ -441,57 +466,32 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
     <div class="step" id="step2">
       <h3>Zahlung</h3>
-      <p class="lead">Wähle, wie du bezahlen möchtest.</p>
-      <div class="summary"><div><div>1 × Silvester Ticket</div><div class="who" id="who"></div></div><b id="priceSum">10 €</b></div>
-      <div class="pay">
-        <label><input type="radio" name="pay" value="PayPal" checked>
-          <div><div class="name">PayPal</div><div class="sub">Auch per Lastschrift über PayPal</div></div>
-          <svg viewBox="0 0 34 24" fill="none" stroke="#000" stroke-width="1.3"><rect x=".7" y=".7" width="32.6" height="22.6" rx="3"/><path d="M13 17l2-10h4.5c2.2 0 3.3 1.2 2.9 3-.4 2-2 3-4.2 3H15.6l-.8 4z"/></svg>
-        </label>
-        <label><input type="radio" name="pay" value="Kreditkarte">
-          <div><div class="name">Kreditkarte</div><div class="sub">Visa · Mastercard · Apple Pay</div></div>
-          <svg viewBox="0 0 34 24" fill="none" stroke="#000" stroke-width="1.3"><rect x=".7" y=".7" width="32.6" height="22.6" rx="3"/><path d="M.7 7.5h32.6M5 17h8"/></svg>
-        </label>
-      </div>
-      <p class="demo-note mono">Demo – es wird nichts abgebucht</p>
+      <div class="summary"><div><div id="sumName2"></div><div class="who" id="who"></div></div><b id="sumPrice2"></b></div>
+      <p class="lead">Im nächsten Schritt wählst du <b>PayPal</b> oder <b>Kreditkarte</b> und bezahlst sicher über unseren Ticketpartner pretix. Dein Ticket mit QR-Code kommt danach per E-Mail.</p>
       <div class="actions">
-        <button class="pill" id="back2">←</button>
+        <button class="pill" id="back2" aria-label="Zurück">←</button>
         <button class="pill solid wide" id="payBtn">Jetzt bezahlen</button>
       </div>
-    </div>
-
-    <div class="step" id="step3">
-      <h3>Dein Ticket</h3>
-      <p class="lead">So kommt dein Ticket per E-Mail an. Zeig den QR-Code am Einlass.</p>
-      <div class="eticket">
-        <div class="et-top"><i aria-hidden="true"></i><div class="mono">Silvester<br>31.12.2026 · 23.59<br>Otto-Ernst-Str. 32<br>Hamburg</div></div>
-        <div class="et-perf"><span class="stamp mono">Demo-Ticket</span></div>
-        <div class="et-body">
-          <div>
-            <div class="et-row"><span>Name</span><b id="tName"></b></div>
-            <div class="et-row"><span>E-Mail</span><b id="tMail"></b></div>
-            <div class="et-row" style="margin:0"><span>Code</span><b class="code" id="tCode"></b></div>
-          </div>
-          <div class="qr" id="qr"></div>
-        </div>
-      </div>
-      <button class="pill solid wide" id="doneBtn">Fertig</button>
+      <p class="demo-note mono" id="payNote" hidden>Ticketshop wird geöffnet …</p>
     </div>
   </div>
 </div>
+</div>
 
-<script src="qrcode.js"></script>
 <script>
 /* ==================================================================
-   EINSTELLUNGEN
+   EINSTELLUNGEN – Ticketshop (pretix)
    ================================================================== */
-const TICKET_PRICE = "10 €";   // Ticketpreis, z. B. "25 €"
+const SHOP_URL = "https://pretix.eu/ZWO/SILVESTER/";
+const TICKETS = {
+  early:  { id: "1211536", name: "Early Bird Ticket", price: "10 €", note: "Einlass bis 1:00 Uhr" },
+  normal: { id: "1211535", name: "Normales Ticket",   price: "15 €", note: "31.12.2026 · ab 23.59 Uhr" }
+};
 
 /* ------------------------------------------------------------------ */
 const $ = id => document.getElementById(id);
 const env = $("envelope"), tilt = $("tilt"), shop = $("shop"), sheet = $("sheet");
-$("priceLabel").textContent = TICKET_PRICE;
-$("priceSum").textContent = TICKET_PRICE;
+document.querySelectorAll("[data-price]").forEach(el => el.textContent = TICKETS[el.dataset.price].price);
 
 /* ---------- Brief öffnen ---------- */
 function openEnvelope(){
@@ -535,19 +535,26 @@ $("backBtn").addEventListener("click", () => {
 (function(){
   let y = 0, s = 7, out = "";
   while (y < 120){ s = (s*9301 + 49297) % 233280; const h = 1 + (s % 4); if ((s>>3) % 3) out += `<rect x="0" y="${y}" width="26" height="${h}" fill="#000"/>`; y += h + 1 + (s % 3); }
-  $("barcode").innerHTML = out;
+  document.querySelectorAll(".barcode").forEach(b => b.innerHTML = out);
   $("mq").textContent = ("ZWO · Silvester 2026 · 31.12.2026 · ab 23.59 Uhr · Otto-Ernst-Straße 32 · Hamburg · ").repeat(8);
 })();
 
 /* ---------- Kauf-Fenster ---------- */
+let current = TICKETS.normal;
 function goStep(n){
   document.querySelectorAll(".step").forEach((el,i) => el.classList.toggle("on", i === n-1));
   document.querySelectorAll(".steps span").forEach(el => el.classList.toggle("on", +el.dataset.s <= n));
   document.querySelector(".panel").scrollTop = 0;
 }
-function openSheet(){ goStep(1); sheet.classList.add("show"); sheet.setAttribute("aria-hidden","false"); setTimeout(()=>$("inName").focus({preventScroll:true}), 450); }
-function closeSheet(){ sheet.classList.remove("show"); sheet.setAttribute("aria-hidden","true"); }
-$("buyNow").addEventListener("click", openSheet);
+function openSheet(key){
+  current = TICKETS[key];
+  ["1","2"].forEach(i => { $("sumName"+i).textContent = "1 × " + current.name; $("sumPrice"+i).textContent = current.price; });
+  $("sumNote1").textContent = current.note;
+  goStep(1); sheet.classList.add("show"); sheet.setAttribute("aria-hidden","false");
+  setTimeout(()=>$("inName").focus({preventScroll:true}), 450);
+}
+function closeSheet(){ sheet.classList.remove("show"); sheet.setAttribute("aria-hidden","true"); $("payNote").hidden = true; }
+document.querySelectorAll("[data-ticket]").forEach(b => b.addEventListener("click", () => openSheet(b.dataset.ticket)));
 $("closeSheet").addEventListener("click", closeSheet);
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
 addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
@@ -565,22 +572,25 @@ $("step1").addEventListener("submit", e => {
 });
 $("back2").addEventListener("click", () => goStep(1));
 
-function makeCode(){
-  const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = "";
-  const r = crypto.getRandomValues(new Uint32Array(8));
-  for (let i = 0; i < 8; i++) s += c[r[i] % c.length];
-  return "ZWO-" + s.slice(0,4) + "-" + s.slice(4);
-}
+/* Bezahlen: öffnet den pretix-Shop mit Ticket + Daten schon ausgefüllt */
 $("payBtn").addEventListener("click", () => {
-  const code = makeCode();
-  $("tName").textContent = $("inName").value.trim();
-  $("tMail").textContent = $("inMail").value.trim();
-  $("tCode").textContent = code;
-  const q = qrcode(0, "M"); q.addData(code); q.make();
-  $("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
-  goStep(3);
+  const name = $("inName").value.trim(), mail = $("inMail").value.trim();
+  const cut = name.lastIndexOf(" ");
+  const data = {
+    "email": mail,
+    "attendee-name-given-name": name.slice(0, cut),
+    "attendee-name-family-name": name.slice(cut + 1)
+  };
+  const items = [{ item: "item_" + current.id, count: 1 }];
+  $("payNote").hidden = false;
+  if (window.PretixWidget && typeof window.PretixWidget.open === "function") {
+    window.PretixWidget.open(SHOP_URL, null, null, items, data);
+    setTimeout(closeSheet, 600);
+  } else {
+    // Falls das pretix-Skript nicht geladen ist: Shop direkt öffnen
+    location.href = SHOP_URL;
+  }
 });
-$("doneBtn").addEventListener("click", () => { closeSheet(); $("step1").reset(); });
 </script>
 </body>
 </html>
