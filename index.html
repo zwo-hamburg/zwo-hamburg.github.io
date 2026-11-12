@@ -4,231 +4,352 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ZWO – Silvester 2026</title>
-<meta name="description" content="ZWO · 31.12.2026 · ab 23.59 Uhr">
-<meta name="theme-color" content="#f4f0e8">
+<meta name="description" content="ZWO · 31.12.2026 · ab 23.59 Uhr · Otto-Ernst-Straße 32, Hamburg">
+<meta name="theme-color" content="#080808" id="themeColor">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <style>
-  /* ============================================================
-     EINSTELLUNGEN – hier kannst du Farben/Größen leicht ändern
-     ============================================================ */
-  :root {
-    --page:      #f4f0e8;   /* Hintergrund der Seite            */
-    --paper:     #ebe3d3;   /* Umschlag außen                   */
-    --paper-in:  #dcd2bf;   /* Umschlag innen                   */
-    --letter:    #f3eee3;   /* Brief                            */
-    --ink-blue:  #2430c9;   /* Blaue Handschrift                */
-    --ink:       #26231f;   /* Schreibmaschinen-Schrift         */
-  }
+/* ==================================================================
+   FARBEN
+   ================================================================== */
+:root{
+  --night:#070707;
+  --paper:#e8dfcd; --paper-in:#d6ccb7; --letter:#f2ece0;
+  --ink:#1d1b18;
+  --bw-black:#0b0b0b; --bw-white:#ffffff; --bw-line:#0b0b0b;
+  --safe-t:env(safe-area-inset-top); --safe-b:env(safe-area-inset-bottom);
+}
+@font-face{font-family:"Typewriter";src:url("typewriter.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"Inter";src:url("inter.woff2") format("woff2");font-weight:100 900;font-display:swap}
 
-  @font-face { font-family: "Typewriter";  src: url("typewriter.woff2") format("woff2"); font-display: swap; }
-  @font-face { font-family: "Handwriting"; src: url("handwriting.woff2") format("woff2"); font-display: swap; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--night);color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif;
+  overflow:hidden;-webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    background: var(--page);
-    background-image: radial-gradient(ellipse at 50% 40%, #faf8f3 0%, var(--page) 70%);
-    font-family: "Typewriter", "Courier New", monospace;
-    color: var(--ink);
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-  }
+/* ==================================================================
+   1) INTRO – Brief auf Schwarz
+   ================================================================== */
+#intro{
+  position:fixed;inset:0;
+  display:grid;place-items:center;
+  padding:calc(24px + var(--safe-t)) 0 calc(24px + var(--safe-b));
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 52%, rgba(255,236,200,.10), transparent 70%),
+    radial-gradient(ellipse at 50% 50%, #151412 0%, #0a0a0a 55%, #030303 100%);
+  perspective:1400px;
+}
+/* Filmkorn über dem Schwarz */
+#intro::after{
+  content:"";position:absolute;inset:-50%;pointer-events:none;opacity:.10;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite;
+}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
 
-  .scene {
-    min-height: 100svh;
-    display: grid;
-    place-items: center;
-    padding: calc(24px + env(safe-area-inset-top)) env(safe-area-inset-right) calc(24px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
-  }
+.tilt{transition:transform .5s ease-out;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
 
-  /* Größe des Umschlags: passt sich Handy & Laptop an */
-  .envelope {
-    --w: min(90vw, 540px, 70svh);
-    --h: calc(var(--w) * 0.66);
-    position: relative;
-    width: var(--w);
-    height: var(--h);
-    perspective: 1600px;
-    cursor: pointer;
-    outline: none;
-    transition: transform 1s cubic-bezier(.2,.7,.2,1) .85s;
-    animation: float 4.5s ease-in-out infinite;
-  }
-  .envelope:focus-visible { outline: 2px dashed var(--ink-blue); outline-offset: 10px; }
-  @keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -5px; } }
-  .envelope.open { cursor: default; animation: none; transform: translateY(calc(var(--h) * 0.21)); }
+.envelope{
+  --w:min(90vw,540px,66svh);
+  --h:calc(var(--w)*.66);
+  position:relative;width:var(--w);height:var(--h);
+  perspective:1600px;cursor:pointer;outline:none;
+  transition:transform 1s cubic-bezier(.2,.7,.2,1) .85s;
+  animation:float 5s ease-in-out infinite;
+}
+.envelope:focus-visible{outline:1px dashed #e8dfcd;outline-offset:12px}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.envelope.open{cursor:default;animation:none;transform:translateY(calc(var(--h)*.27))}
+/* Lichtschein unter dem Umschlag */
+.envelope::before{
+  content:"";position:absolute;left:-12%;right:-12%;top:78%;height:45%;
+  background:radial-gradient(ellipse at 50% 30%,rgba(0,0,0,.85),transparent 65%);
+  filter:blur(10px);z-index:-1;
+}
 
-  /* Papier-Struktur (feines Rauschen) */
-  .paper {
-    position: absolute; inset: 0;
-    background-color: var(--c);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .22  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+/* Papier: Grundfarbe + Wolkigkeit + Korn + Fasern */
+.paper{
+  position:absolute;inset:0;background-color:var(--c);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .5' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .10 -.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .33 0 0 0 0 .22 0 0 0 .22 -.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+}
+/* Licht von oben links */
+.light{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,250,238,.28) 0%,rgba(255,250,238,0) 42%,rgba(40,25,5,.10) 75%,rgba(40,25,5,.22) 100%)}
+/* Futterpapier innen: schwarz mit feinen Linien */
+.liner{position:absolute;
+  background:
+    repeating-linear-gradient(135deg,transparent 0 5px,rgba(232,223,205,.18) 5px 6px),
+    repeating-linear-gradient(45deg,transparent 0 11px,rgba(232,223,205,.07) 11px 12px),
+    #141210;
+}
 
-  /* Die einzelnen Teile des Umschlags */
-  .part { position: absolute; inset: 0; }
-  .torn  { filter: url(#torn); }
+.part{position:absolute;inset:0}
+.back{z-index:0;filter:url(#torn) drop-shadow(0 18px 30px rgba(0,0,0,.65)) drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.back .paper{--c:var(--paper-in)}
+.back .liner{inset:3% 3.5% 28% 3.5%;box-shadow:inset 0 6px 10px rgba(0,0,0,.5)}
 
-  .back   { z-index: 0; filter: url(#torn) drop-shadow(0 14px 22px rgba(60,45,25,.18)) drop-shadow(0 2px 3px rgba(60,45,25,.15)); }
-  .back .paper { --c: var(--paper-in); }
+.letter{z-index:2;left:7%;right:7%;top:5%;bottom:4%;
+  transition:transform 1.1s cubic-bezier(.25,.8,.25,1) .85s}
+.letter .sheet{position:absolute;inset:0;z-index:0;filter:url(#torn-fine) drop-shadow(0 -2px 8px rgba(0,0,0,.35))}
+.letter .sheet .paper{--c:var(--letter)}
+.envelope.open .letter{transform:translateY(calc(var(--h)*-.54))}
 
-  .letter {
-    z-index: 2;
-    left: 7%; right: 7%; top: 5%; bottom: 4%;
-    transition: transform 1.1s cubic-bezier(.25,.8,.25,1) .85s;
-  }
-  .letter .sheet { filter: url(#torn-fine) drop-shadow(0 -2px 6px rgba(60,45,25,.12)); position:absolute; inset:0; }
-  .letter .sheet .paper { --c: var(--letter); }
-  .envelope.open .letter { transform: translateY(calc(var(--h) * -0.42)); }
+.letter-content{position:absolute;z-index:1;left:0;right:0;top:5%;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  opacity:0;transition:opacity .6s ease 1.3s}
+.envelope.open .letter-content{opacity:1}
 
-  .letter-content {
-    position: absolute; left: 0; right: 0; top: 8%;
-    display: flex; flex-direction: column; align-items: center;
-    text-align: center;
-    opacity: 0;
-    transition: opacity .6s ease 1.3s;
-  }
-  .envelope.open .letter-content { opacity: 1; }
+/* Prägung (Blindprägung) des Logos */
+.emboss{width:20%;aspect-ratio:1425/885;
+  -webkit-mask:url("logo-bw.png") center/contain no-repeat;mask:url("logo-bw.png") center/contain no-repeat;
+  background:rgba(70,55,30,.13);
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 -.5px 0 rgba(60,40,10,.25))}
+.rule{width:56%;height:0;border-top:1px solid rgba(29,27,24,.55);margin:calc(var(--w)*.022) 0 calc(var(--w)*.018)}
+.date{font-family:"Typewriter",monospace;font-size:calc(var(--w)*.044);letter-spacing:.12em;line-height:1.45;text-transform:uppercase}
+.date small{display:block;font-size:.72em;letter-spacing:.2em;opacity:.75}
+.date small.addr{font-size:.5em;letter-spacing:.14em;margin-top:.5em;opacity:.7}
 
-  .buy {
-    font-family: "Handwriting", cursive;
-    color: var(--ink-blue);
-    font-size: calc(var(--w) * 0.19);
-    line-height: .9;
-    text-decoration: none;
-    position: relative;
-    padding: 0 .12em .08em;
-    pointer-events: none;
-    transform: rotate(-3deg);
-    display: inline-block;
-    transition: transform .25s ease;
-  }
-  .envelope.ready .buy { pointer-events: auto; cursor: pointer; }
-  .buy:hover, .buy:focus-visible { transform: rotate(-1deg) scale(1.04); outline: none; }
-  .buy svg { position: absolute; left: 4%; right: 4%; bottom: -.04em; width: 92%; height: .2em; overflow: visible; }
-  .buy svg path { stroke: var(--ink-blue); stroke-width: 3.2; fill: none; stroke-linecap: round;
-                  stroke-dasharray: 400; stroke-dashoffset: 400; transition: stroke-dashoffset .9s ease 1.9s; }
-  .envelope.open .buy svg path { stroke-dashoffset: 0; }
+.tw-btn{
+  margin-top:calc(var(--w)*.032);
+  font-family:"Typewriter",monospace;text-transform:uppercase;
+  font-size:calc(var(--w)*.04);letter-spacing:.22em;
+  padding:.85em 1.5em .8em 1.7em;border:1.5px solid var(--ink);border-radius:999px;
+  color:var(--ink);background:transparent;pointer-events:none;
+  transition:background .25s,color .25s,transform .25s;
+}
+.envelope.ready .tw-btn{pointer-events:auto}
+@media(hover:hover){.tw-btn:hover{background:var(--ink);color:var(--letter)}}
+.tw-btn:focus-visible{background:var(--ink);color:var(--letter);outline:none}
+.tw-btn:active{transform:scale(.97)}
 
-  .date {
-    margin-top: calc(var(--w) * 0.045);
-    font-size: calc(var(--w) * 0.042);
-    letter-spacing: .08em;
-    line-height: 1.55;
-    text-transform: uppercase;
-  }
-  .note {
-    margin-top: calc(var(--w) * 0.02);
-    font-size: calc(var(--w) * 0.026);
-    opacity: 0; transition: opacity .3s;
-    color: var(--ink-blue);
-  }
-  .note.show { opacity: 1; }
+.pocket{z-index:3;filter:url(#torn) drop-shadow(0 -1px 2px rgba(0,0,0,.35));pointer-events:none}
+.pocket .shape{position:absolute;inset:0;clip-path:polygon(0 0,50% 57%,100% 0,100% 100%,0 100%)}
+.pocket .paper{--c:var(--paper)}
+.pocket .sides{position:absolute;inset:0;background:
+  linear-gradient(to bottom right,rgba(60,40,10,.10),transparent 55%) left/50% 100% no-repeat,
+  linear-gradient(to bottom left,rgba(60,40,10,.06),transparent 55%) right/50% 100% no-repeat}
+.pocket .bottom{position:absolute;inset:0;clip-path:polygon(0 100%,50% 47%,100% 100%);
+  background:linear-gradient(to bottom,rgba(255,255,255,.20),rgba(255,255,255,.04) 60%,rgba(0,0,0,.04))}
+.creases{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.creases path{fill:none;vector-effect:non-scaling-stroke}
 
-  .pocket { z-index: 3; filter: url(#torn) drop-shadow(0 -1px 2px rgba(60,45,25,.18)); pointer-events: none; }
-  .pocket .shape { position: absolute; inset: 0; clip-path: polygon(0 0, 50% 57%, 100% 0, 100% 100%, 0 100%); }
-  .pocket .paper { --c: var(--paper); }
-  .pocket .bottom {
-    position: absolute; inset: 0;
-    clip-path: polygon(0 100%, 50% 47%, 100% 100%);
-    background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,.05));
-  }
-  .pocket .sides {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(to bottom right, rgba(80,60,30,.07), transparent 60%) left / 50% 100% no-repeat,
-      linear-gradient(to bottom left,  rgba(80,60,30,.07), transparent 60%) right / 50% 100% no-repeat;
-  }
+.flap{z-index:4;height:63%;transform-origin:50% 0;transform:rotateX(0deg);
+  filter:url(#torn) drop-shadow(0 5px 5px rgba(0,0,0,.28));
+  transition:transform .8s cubic-bezier(.45,.05,.3,1) .2s,z-index 0s linear .6s}
+.flap .shape{position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%)}
+.flap .paper{--c:var(--paper)}
+.flap .liner{inset:0;opacity:0;transition:opacity 0s linear .6s}
+.flap .light{background:linear-gradient(160deg,rgba(255,250,238,.32),rgba(255,250,238,0) 45%,rgba(40,25,5,.12))}
+.envelope.open .flap{transform:rotateX(180deg);z-index:1}
+.envelope.open .flap .liner{opacity:1}
 
-  .flap {
-    z-index: 4;
-    height: 63%;
-    transform-origin: 50% 0;
-    transform: rotateX(0deg);
-    filter: url(#torn) drop-shadow(0 4px 4px rgba(60,45,25,.16));
-    transition: transform .8s cubic-bezier(.45,.05,.3,1) .2s, z-index 0s linear .6s, filter 0s linear .6s;
-  }
-  .flap .shape { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 50% 100%); }
-  .flap .paper { --c: var(--paper); }
-  .envelope.open .flap {
-    transform: rotateX(180deg);
-    z-index: 1;
-    filter: url(#torn) brightness(.93);
-  }
+.logo{position:absolute;z-index:5;width:72%;aspect-ratio:950/590;left:50%;top:50%;
+  transform:translate(-50%,-50%);transition:opacity .45s ease,transform .45s ease;pointer-events:none}
+.envelope.open .logo{opacity:0;transform:translate(-50%,-46%) scale(.94)}
+.logo img{position:absolute;inset:0;width:100%;height:100%;
+  animation:var(--anim) var(--dur) ease-in-out var(--delay) infinite alternate;
+  transform-origin:var(--ox) var(--oy);will-change:transform}
+.f-purple{--anim:sway;--dur:3.6s;--delay:-1.2s;--ox:22%;--oy:80%;--r:1.6deg}
+.f-red{--anim:swayUp;--dur:3.1s;--delay:-.4s;--ox:24%;--oy:49%;--r:2.4deg}
+.f-pink{--anim:reach;--dur:2.8s;--delay:-2s;--ox:50%;--oy:63%;--r:1deg}
+.f-green{--anim:sway;--dur:4.2s;--delay:-.9s;--ox:50%;--oy:92%;--r:-1.3deg}
+.f-yellow{--anim:sway;--dur:3.4s;--delay:-2.6s;--ox:73%;--oy:50%;--r:2.6deg}
+.f-orange{--anim:sway;--dur:3.9s;--delay:-1.7s;--ox:88%;--oy:58%;--r:-2.6deg}
+@keyframes sway{from{transform:rotate(calc(var(--r)*-1))}to{transform:rotate(var(--r))}}
+@keyframes swayUp{from{transform:rotate(calc(var(--r)*-1)) translateY(.6%)}to{transform:rotate(var(--r)) translateY(-.8%)}}
+@keyframes reach{from{transform:scaleY(.985) rotate(calc(var(--r)*-1))}to{transform:scaleY(1.03) rotate(var(--r))}}
 
-  /* Logo vorne drauf */
-  .logo {
-    position: absolute; z-index: 5;
-    width: 72%;
-    aspect-ratio: 950 / 590;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    transition: opacity .45s ease, transform .45s ease;
-    pointer-events: none;
-  }
-  .envelope.open .logo { opacity: 0; transform: translate(-50%, -46%) scale(.94); }
-  .logo img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    animation: var(--anim) var(--dur) ease-in-out var(--delay) infinite alternate;
-    transform-origin: var(--ox) var(--oy);
-    will-change: transform;
-    filter: drop-shadow(0 1px 0.6px rgba(40,25,10,.22));
-  }
-  .f-purple { --anim: sway;   --dur: 3.6s; --delay: -1.2s; --ox: 22%; --oy: 80%; --r: 1.6deg; }
-  .f-red    { --anim: swayUp; --dur: 3.1s; --delay: -0.4s; --ox: 24%; --oy: 49%; --r: 2.4deg; }
-  .f-pink   { --anim: reach;  --dur: 2.8s; --delay: -2.0s; --ox: 50%; --oy: 63%; --r: 1deg; }
-  .f-green  { --anim: sway;   --dur: 4.2s; --delay: -0.9s; --ox: 50%; --oy: 92%; --r: -1.3deg; }
-  .f-yellow { --anim: sway;   --dur: 3.4s; --delay: -2.6s; --ox: 73%; --oy: 50%; --r: 2.6deg; }
-  .f-orange { --anim: sway;   --dur: 3.9s; --delay: -1.7s; --ox: 88%; --oy: 58%; --r: -2.6deg; }
+/* ==================================================================
+   2) TICKET-SEITE – schwarz/weiß
+   ================================================================== */
+#shop{
+  position:fixed;inset:0;z-index:20;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:var(--bw-white);color:var(--bw-black);
+  clip-path:circle(0px at var(--cx,50%) var(--cy,50%));
+  visibility:hidden;
+  transition:clip-path .9s cubic-bezier(.7,0,.2,1),visibility 0s linear .9s;
+}
+#shop.show{clip-path:circle(150vmax at var(--cx,50%) var(--cy,50%));visibility:visible;
+  transition:clip-path .9s cubic-bezier(.7,0,.2,1),visibility 0s}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.mono{font-family:"Typewriter",monospace}
 
-  @keyframes sway   { from { transform: rotate(calc(var(--r) * -1)); } to { transform: rotate(var(--r)); } }
-  @keyframes swayUp { from { transform: rotate(calc(var(--r) * -1)) translateY(0.6%); } to { transform: rotate(var(--r)) translateY(-0.8%); } }
-  @keyframes reach  { from { transform: scaleY(.985) rotate(calc(var(--r) * -1)); } to { transform: scaleY(1.03) rotate(var(--r)); } }
+.nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;
+  padding-top:calc(14px + var(--safe-t));padding-bottom:14px}
+.back-btn{width:44px;height:44px;margin-left:-10px;display:grid;place-items:center}
+.back-btn svg{width:26px;height:26px}
+.nav-links{display:flex;gap:16px;font-size:14px;font-weight:500}
+.nav-links span::before{content:"○";margin-right:5px;font-size:11px;position:relative;top:-1px}
+.nav-links span.on::before{content:"●"}
 
-  @media (prefers-reduced-motion: reduce) {
-    .logo img, .envelope { animation: none !important; }
-  }
+.hero{padding:18px 0 8px}
+.hero h1{font-size:clamp(44px,13vw,76px);font-weight:700;letter-spacing:-.04em;line-height:.95}
+.hero p{margin-top:12px;max-width:430px;font-size:13px;line-height:1.45;color:#333}
+
+.tickets{display:grid;grid-template-columns:1fr;gap:18px;padding:26px 0 10px}
+@media(min-width:760px){.tickets{grid-template-columns:minmax(0,600px)}}
+
+.ticket{display:flex;border:1px solid var(--bw-line);min-height:190px;position:relative;background:#fff}
+.t-main{flex:1;padding:18px 18px 16px 20px;display:flex;flex-direction:column}
+.t-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.t-head h2{font-size:clamp(22px,6.4vw,28px);font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.t-sub{font-size:14px;margin-top:4px}
+.badge{flex:none;width:48px;height:48px;background:var(--bw-black);display:grid;place-items:center;margin-top:-4px}
+.badge i{width:38px;aspect-ratio:1425/885;background:#fff;
+  -webkit-mask:url("logo-bw.png") center/contain no-repeat;mask:url("logo-bw.png") center/contain no-repeat}
+.t-main hr{border:0;border-top:1px solid var(--bw-line);margin:12px 0 10px}
+.t-price{font-size:clamp(24px,7vw,30px);font-weight:600;letter-spacing:-.02em}
+.t-foot{margin-top:auto;padding-top:12px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.t-small{font-size:9.5px;line-height:1.35;text-transform:uppercase;letter-spacing:.02em;max-width:150px}
+.pill{border:1px solid var(--bw-line);border-radius:999px;padding:12px 22px;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s}
+@media(hover:hover){.pill:hover{background:var(--bw-black);color:#fff}.pill.solid:hover{background:#333}}
+.pill:focus-visible{outline:2px solid #000;outline-offset:2px}
+.pill.solid{background:var(--bw-black);color:#fff}
+.t-stub{width:clamp(70px,20vw,96px);border-left:1px dashed var(--bw-line);position:relative;
+  display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 6px}
+.t-stub::before,.t-stub::after{content:"";position:absolute;left:-9px;width:16px;height:16px;border-radius:50%;
+  background:#fff;border:1px solid var(--bw-line)}
+.t-stub::before{top:-9px;clip-path:inset(50% 0 0 0)}
+.t-stub::after{bottom:-9px;clip-path:inset(0 0 50% 0)}
+.t-vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:8.5px;font-weight:600;line-height:1.2;
+  letter-spacing:.04em;text-transform:uppercase;text-align:center}
+.barcode{width:26px;height:120px}
+
+.marquee{border-top:1px solid var(--bw-line);border-bottom:1px solid var(--bw-line);margin:26px 0 0;overflow:hidden;white-space:nowrap}
+.marquee div{display:inline-block;padding:10px 0;font-size:12px;letter-spacing:.2em;text-transform:uppercase;animation:mq 22s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+.big-logo{padding:26px 0 6px}
+.big-logo canvas{display:block;width:100%;height:auto;aspect-ratio:1425/885}
+
+.footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;
+  padding:18px 0 calc(26px + var(--safe-b));font-size:11px;text-transform:uppercase;font-weight:500}
+.chips{display:flex;gap:6px}
+.chips span{border:1px solid var(--bw-line);border-radius:999px;padding:3px 10px;font-size:9px}
+
+/* ==================================================================
+   3) KAUF-FENSTER
+   ================================================================== */
+.sheet{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(0,0,0,0);pointer-events:none;transition:background .35s}
+.sheet.show{background:rgba(0,0,0,.45);pointer-events:auto}
+.panel{width:100%;max-width:520px;max-height:100%;overflow-y:auto;background:#fff;color:var(--bw-black);
+  border-top:1px solid var(--bw-line);transform:translateY(100%);transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  padding:0 20px calc(22px + var(--safe-b))}
+@media(min-width:620px){.sheet{align-items:center}.panel{border:1px solid var(--bw-line);max-height:92vh;transform:translateY(24px);opacity:0}}
+.sheet .panel{visibility:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s,visibility 0s linear .45s}
+.sheet.show .panel{transform:none;opacity:1;visibility:visible;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s,visibility 0s}
+.panel-head{position:sticky;top:0;background:#fff;display:flex;justify-content:space-between;align-items:center;
+  padding:16px 0 14px;border-bottom:1px solid var(--bw-line);z-index:2}
+.steps{display:flex;gap:14px;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.steps span{opacity:.35}.steps span.on{opacity:1}
+.steps b{font-weight:700;margin-right:4px}
+.close{width:40px;height:40px;margin-right:-10px;font-size:26px;line-height:1}
+.step{display:none;padding-top:22px}.step.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step h3{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.step .lead{font-size:13px;color:#444;margin:8px 0 20px;line-height:1.45}
+.field{display:block;border-bottom:1px solid var(--bw-line);padding:10px 0 6px;margin-bottom:14px}
+.field span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.field input{width:100%;border:0;outline:none;font:inherit;font-size:18px;padding:8px 0 4px;background:transparent;color:inherit;border-radius:0}
+.field input::placeholder{color:#b5b5b5}
+.field.err{border-color:#c00}.field.err span::after{content:" – bitte prüfen";color:#c00}
+.summary{display:flex;justify-content:space-between;border:1px solid var(--bw-line);padding:14px 16px;margin-bottom:16px;font-size:14px}
+.summary .who{font-size:11px;color:#555;margin-top:3px}
+.pay{display:grid;gap:10px;margin-bottom:12px}
+.pay label{display:flex;align-items:center;gap:14px;border:1px solid var(--bw-line);padding:16px;cursor:pointer;transition:background .15s}
+.pay input{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:1px solid var(--bw-line);border-radius:50%;flex:none;display:grid;place-items:center}
+.pay input:checked::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--bw-black)}
+.pay label:has(input:checked){background:#f2f2f2}
+.pay .name{font-weight:600;font-size:16px}
+.pay .sub{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#555;margin-top:2px}
+.pay svg{margin-left:auto;width:34px;height:24px;flex:none}
+.demo-note{font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px dashed var(--bw-line);padding:8px 10px;margin:4px 0 18px;text-align:center}
+.wide{width:100%;padding:17px 22px;font-size:12px}
+.actions{display:flex;gap:10px;margin-top:8px}
+
+/* E-Ticket */
+.eticket{border:1px solid var(--bw-line);margin:4px 0 14px;position:relative;overflow:hidden}
+.et-top{background:var(--bw-black);color:#fff;padding:18px 18px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.et-top i{display:block;width:96px;aspect-ratio:1425/885;background:#fff;
+  -webkit-mask:url("logo-bw.png") center/contain no-repeat;mask:url("logo-bw.png") center/contain no-repeat}
+.et-top .mono{font-size:11px;letter-spacing:.14em;text-align:right;line-height:1.5;text-transform:uppercase}
+.et-perf{height:0;border-top:1px dashed var(--bw-line);position:relative;margin:0 14px}
+.et-body{padding:16px 18px 18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end}
+.et-row{margin-bottom:10px}
+.et-row span{display:block;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#555}
+.et-row b{font-size:15px;font-weight:600;word-break:break-all}
+.et-row .code{font-family:"Typewriter",monospace;font-size:16px;letter-spacing:.08em}
+.qr{width:112px;height:112px}
+.qr svg{width:100%;height:100%;display:block}
+.stamp{position:absolute;left:50%;top:-9px;transform:translateX(-50%);background:#fff;color:#000;font-size:9px;
+  letter-spacing:.24em;padding:2px 10px;font-weight:700}
+
+@media (prefers-reduced-motion:reduce){
+  .logo img,.envelope,#intro::after,.marquee div{animation:none!important}
+}
 </style>
 </head>
 <body>
 
-<!-- Filter für die gerissenen Papierkanten -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="torn" x="-5%" y="-5%" width="110%" height="110%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="7" result="noise"/>
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
   <filter id="torn-fine" x="-5%" y="-5%" width="110%" height="110%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="3" result="noise"/>
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 </svg>
 
-<main class="scene">
+<!-- ============================ 1) INTRO ============================ -->
+<main id="intro">
+  <div class="tilt" id="tilt">
   <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Einladung öffnen">
 
-    <div class="part back"><div class="paper"></div></div>
+    <div class="part back"><div class="paper"></div><div class="liner"></div><div class="light"></div></div>
 
     <div class="part letter">
-      <div class="sheet"><div class="paper"></div></div>
+      <div class="sheet"><div class="paper"></div><div class="light" style="opacity:.5"></div></div>
       <div class="letter-content">
-        <a class="buy" id="buy" href="#" tabindex="-1">
-          Buy ticket
-          <svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M3 12 C 40 4, 80 16, 120 9 S 180 6, 197 11"/>
-          </svg>
-        </a>
-        <p class="date">31.12.2026<br>ab 23.59 Uhr</p>
-        <p class="note" id="note">Ticketshop öffnet bald</p>
+        <div class="emboss" aria-hidden="true"></div>
+        <div class="rule"></div>
+        <p class="date">31.12.2026<small>ab 23.59 Uhr</small><small class="addr">Otto-Ernst-Straße 32 · Hamburg</small></p>
+        <button class="tw-btn" id="toShop" tabindex="-1">Buy ticket&nbsp;→</button>
       </div>
     </div>
 
     <div class="part pocket">
-      <div class="shape"><div class="paper"></div><div class="sides"></div><div class="bottom"></div></div>
+      <div class="shape">
+        <div class="paper"></div><div class="sides"></div><div class="bottom"></div><div class="light"></div>
+        <svg class="creases" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,100 L50,47 L100,100" stroke="rgba(60,40,10,.22)" stroke-width="1.2"/>
+          <path d="M0,99.2 L50,46.2 L100,99.2" stroke="rgba(255,252,240,.55)" stroke-width="1"/>
+          <path d="M0.6,0 L50,56.4 L99.4,0" stroke="rgba(255,252,240,.5)" stroke-width="1"/>
+        </svg>
+      </div>
     </div>
 
-    <div class="part flap"><div class="shape"><div class="paper"></div></div></div>
+    <div class="part flap">
+      <div class="shape">
+        <div class="paper"></div><div class="light"></div><div class="liner"></div>
+        <svg class="creases" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0.5,0 L50,99 L99.5,0" stroke="rgba(255,252,240,.6)" stroke-width="1.2"/>
+          <path d="M0,1.2 L100,1.2" stroke="rgba(60,40,10,.18)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
 
     <div class="logo" aria-hidden="true">
       <img class="f-purple" src="fig-purple.png" alt="">
@@ -239,39 +360,250 @@
       <img class="f-orange" src="fig-orange.png" alt="">
     </div>
   </div>
+  </div>
 </main>
 
+<!-- ========================= 2) TICKET-SEITE ========================= -->
+<section id="shop" aria-hidden="true">
+  <header class="nav">
+    <div class="wrap">
+      <button class="back-btn" id="backBtn" aria-label="Zurück zum Brief">
+        <svg viewBox="0 0 26 26" fill="none" stroke="#000" stroke-width="1.6"><path d="M24 13H3M11 5l-8 8 8 8"/></svg>
+      </button>
+      <div class="nav-links"><span class="on">Tickets</span><span>Silvester 2026</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>Tickets</h1>
+      <p>ZWO – Silvester. 31.12.2026, ab 23.59 Uhr.<br>Otto-Ernst-Straße 32, Hamburg.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.</p>
+    </div>
+
+    <div class="tickets">
+      <article class="ticket">
+        <div class="t-main">
+          <div class="t-head">
+            <div><h2>Silvester<br>Ticket</h2><p class="t-sub">31.12.2026 · ab 23.59</p></div>
+            <div class="badge" aria-hidden="true"><i></i></div>
+          </div>
+          <hr>
+          <p class="t-price" id="priceLabel">10 €</p>
+          <div class="t-foot">
+            <p class="t-small">1 Person · Einlass mit QR-Code · Ticket per E-Mail</p>
+            <button class="pill" id="buyNow">Buy now</button>
+          </div>
+        </div>
+        <div class="t-stub" aria-hidden="true">
+          <span class="t-vert">Otto-Ernst-Str. 32<br>Hamburg</span>
+          <svg class="barcode" id="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
+        </div>
+      </article>
+    </div>
+
+    <div class="marquee" aria-hidden="true"><div class="mono" id="mq"></div></div>
+
+    <div class="big-logo"><canvas id="wave" aria-label="ZWO"></canvas></div>
+
+    <footer class="footer">
+      <span>→ Otto-Ernst-Straße 32, Hamburg</span>
+      <div class="chips"><span>31.12</span><span>23.59</span><span>2027</span></div>
+    </footer>
+  </div>
+</section>
+
+<!-- ========================= 3) KAUF-FENSTER ========================= -->
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="panel" role="dialog" aria-modal="true" aria-label="Ticket kaufen">
+    <div class="panel-head">
+      <div class="steps mono"><span class="on" data-s="1"><b>01</b>Daten</span><span data-s="2"><b>02</b>Zahlung</span><span data-s="3"><b>03</b>Ticket</span></div>
+      <button class="close" id="closeSheet" aria-label="Schließen">×</button>
+    </div>
+
+    <form class="step on" id="step1" novalidate>
+      <h3>Deine Daten</h3>
+      <p class="lead">Dein Name steht auf dem Ticket. Das Ticket schicken wir an deine E-Mail-Adresse.</p>
+      <label class="field" id="fName"><span>Vor- und Nachname</span><input id="inName" type="text" autocomplete="name" placeholder="Max Mustermann" required></label>
+      <label class="field" id="fMail"><span>E-Mail-Adresse</span><input id="inMail" type="email" autocomplete="email" inputmode="email" placeholder="max@beispiel.de" required></label>
+      <button class="pill solid wide" type="submit">Weiter →</button>
+    </form>
+
+    <div class="step" id="step2">
+      <h3>Zahlung</h3>
+      <p class="lead">Wähle, wie du bezahlen möchtest.</p>
+      <div class="summary"><div><div>1 × Silvester Ticket</div><div class="who" id="who"></div></div><b id="priceSum">10 €</b></div>
+      <div class="pay">
+        <label><input type="radio" name="pay" value="PayPal" checked>
+          <div><div class="name">PayPal</div><div class="sub">Auch per Lastschrift über PayPal</div></div>
+          <svg viewBox="0 0 34 24" fill="none" stroke="#000" stroke-width="1.3"><rect x=".7" y=".7" width="32.6" height="22.6" rx="3"/><path d="M13 17l2-10h4.5c2.2 0 3.3 1.2 2.9 3-.4 2-2 3-4.2 3H15.6l-.8 4z"/></svg>
+        </label>
+        <label><input type="radio" name="pay" value="Kreditkarte">
+          <div><div class="name">Kreditkarte</div><div class="sub">Visa · Mastercard · Apple Pay</div></div>
+          <svg viewBox="0 0 34 24" fill="none" stroke="#000" stroke-width="1.3"><rect x=".7" y=".7" width="32.6" height="22.6" rx="3"/><path d="M.7 7.5h32.6M5 17h8"/></svg>
+        </label>
+      </div>
+      <p class="demo-note mono">Demo – es wird nichts abgebucht</p>
+      <div class="actions">
+        <button class="pill" id="back2">←</button>
+        <button class="pill solid wide" id="payBtn">Jetzt bezahlen</button>
+      </div>
+    </div>
+
+    <div class="step" id="step3">
+      <h3>Dein Ticket</h3>
+      <p class="lead">So kommt dein Ticket per E-Mail an. Zeig den QR-Code am Einlass.</p>
+      <div class="eticket">
+        <div class="et-top"><i aria-hidden="true"></i><div class="mono">Silvester<br>31.12.2026 · 23.59<br>Otto-Ernst-Str. 32<br>Hamburg</div></div>
+        <div class="et-perf"><span class="stamp mono">Demo-Ticket</span></div>
+        <div class="et-body">
+          <div>
+            <div class="et-row"><span>Name</span><b id="tName"></b></div>
+            <div class="et-row"><span>E-Mail</span><b id="tMail"></b></div>
+            <div class="et-row" style="margin:0"><span>Code</span><b class="code" id="tCode"></b></div>
+          </div>
+          <div class="qr" id="qr"></div>
+        </div>
+      </div>
+      <button class="pill solid wide" id="doneBtn">Fertig</button>
+    </div>
+  </div>
+</div>
+
+<script src="qrcode.js"></script>
 <script>
-  /* ============================================================
-     HIER DEN LINK ZU DEINEM TICKETSHOP EINTRAGEN (zwischen die "")
-     Beispiel: "https://pretix.eu/zwo/silvester2026/"
-     ============================================================ */
-  const TICKET_URL = "";
+/* ==================================================================
+   EINSTELLUNGEN
+   ================================================================== */
+const TICKET_PRICE = "10 €";   // Ticketpreis, z. B. "25 €"
 
-  const env  = document.getElementById("envelope");
-  const buy  = document.getElementById("buy");
-  const note = document.getElementById("note");
+/* ------------------------------------------------------------------ */
+const $ = id => document.getElementById(id);
+const env = $("envelope"), tilt = $("tilt"), shop = $("shop"), sheet = $("sheet");
+$("priceLabel").textContent = TICKET_PRICE;
+$("priceSum").textContent = TICKET_PRICE;
 
-  function openEnvelope() {
-    if (env.classList.contains("open")) return;
-    env.classList.add("open");
-    env.removeAttribute("role");
-    env.setAttribute("aria-label", "Einladung");
-    setTimeout(() => {
-      env.classList.add("ready");
-      buy.tabIndex = 0;
-    }, 1700);
+/* ---------- Brief öffnen ---------- */
+function openEnvelope(){
+  if (env.classList.contains("open")) return;
+  env.classList.add("open");
+  env.removeAttribute("role");
+  setTimeout(() => { env.classList.add("ready"); $("toShop").tabIndex = 0; }, 1700);
+}
+env.addEventListener("click", e => { if (!e.target.closest(".tw-btn")) openEnvelope(); });
+env.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && !env.classList.contains("open")) { e.preventDefault(); openEnvelope(); }
+});
+
+/* leichtes Neigen mit der Maus (nur am Computer) */
+if (matchMedia("(hover:hover) and (pointer:fine)").matches){
+  addEventListener("pointermove", e => {
+    const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+    tilt.style.setProperty("--ry", (x * 10).toFixed(2) + "deg");
+    tilt.style.setProperty("--rx", (y * -8).toFixed(2) + "deg");
+  });
+}
+
+/* ---------- zur Ticketseite ---------- */
+let lastX = "50%", lastY = "50%";
+$("toShop").addEventListener("click", e => {
+  e.stopPropagation();
+  const r = e.currentTarget.getBoundingClientRect();
+  lastX = (r.left + r.width/2) + "px"; lastY = (r.top + r.height/2) + "px";
+  shop.style.setProperty("--cx", lastX); shop.style.setProperty("--cy", lastY);
+  shop.scrollTop = 0;
+  shop.classList.add("show"); shop.setAttribute("aria-hidden","false");
+  $("themeColor").content = "#ffffff";
+  startWave();
+});
+$("backBtn").addEventListener("click", () => {
+  shop.style.setProperty("--cx", "40px"); shop.style.setProperty("--cy", "40px");
+  shop.classList.remove("show"); shop.setAttribute("aria-hidden","true");
+  $("themeColor").content = "#080808";
+  setTimeout(stopWave, 900);
+});
+
+/* ---------- Strichcode auf dem Abriss ---------- */
+(function(){
+  let y = 0, s = 7, out = "";
+  while (y < 120){ s = (s*9301 + 49297) % 233280; const h = 1 + (s % 4); if ((s>>3) % 3) out += `<rect x="0" y="${y}" width="26" height="${h}" fill="#000"/>`; y += h + 1 + (s % 3); }
+  $("barcode").innerHTML = out;
+  $("mq").textContent = ("ZWO · Silvester 2026 · 31.12.2026 · ab 23.59 Uhr · Otto-Ernst-Straße 32 · Hamburg · ").repeat(8);
+})();
+
+/* ---------- großes ZWO-Logo: Schlangenbewegung ---------- */
+const canvas = $("wave"), ctx = canvas.getContext("2d");
+const logo = new Image(); logo.src = "logo-bw.png";
+let raf = null, t0 = 0;
+function sizeCanvas(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = canvas.clientWidth || 300;
+  canvas.width = Math.round(w * dpr); canvas.height = Math.round(w * dpr * 885/1425);
+}
+function draw(t){
+  if (!t0) t0 = t;
+  const s = (t - t0) / 1000;
+  const W = canvas.width, H = canvas.height;
+  const pad = H * 0.06;                 // Platz für die Welle
+  const ih = H - pad*2;
+  ctx.clearRect(0,0,W,H);
+  if (logo.complete && logo.naturalWidth){
+    const step = Math.max(1, Math.round(W / 420));
+    for (let x = 0; x < W; x += step){
+      const p = x / W;
+      const dy = Math.sin(p * Math.PI * 2.2 - s * 1.6) * pad * .85
+               + Math.sin(p * Math.PI * 5.1 - s * 2.3) * pad * .18;
+      const sx = p * logo.naturalWidth, sw = step / W * logo.naturalWidth;
+      ctx.drawImage(logo, sx, 0, sw + .6, logo.naturalHeight, x, pad + dy, step + .6, ih);
+    }
   }
+  raf = requestAnimationFrame(draw);
+}
+function startWave(){ sizeCanvas(); if (!raf) raf = requestAnimationFrame(draw); }
+function stopWave(){ if (raf) cancelAnimationFrame(raf); raf = null; }
+addEventListener("resize", () => { if (raf) sizeCanvas(); });
 
-  env.addEventListener("click", openEnvelope);
-  env.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openEnvelope(); }
-  });
+/* ---------- Kauf-Fenster ---------- */
+function goStep(n){
+  document.querySelectorAll(".step").forEach((el,i) => el.classList.toggle("on", i === n-1));
+  document.querySelectorAll(".steps span").forEach(el => el.classList.toggle("on", +el.dataset.s <= n));
+  document.querySelector(".panel").scrollTop = 0;
+}
+function openSheet(){ goStep(1); sheet.classList.add("show"); sheet.setAttribute("aria-hidden","false"); setTimeout(()=>$("inName").focus({preventScroll:true}), 450); }
+function closeSheet(){ sheet.classList.remove("show"); sheet.setAttribute("aria-hidden","true"); }
+$("buyNow").addEventListener("click", openSheet);
+$("closeSheet").addEventListener("click", closeSheet);
+sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
+addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
 
-  if (TICKET_URL) buy.href = TICKET_URL;
-  buy.addEventListener("click", e => {
-    if (!TICKET_URL) { e.preventDefault(); note.classList.add("show"); }
-  });
+$("step1").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("inName").value.trim(), mail = $("inMail").value.trim();
+  const okName = name.length >= 3 && name.includes(" ");
+  const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
+  $("fName").classList.toggle("err", !okName);
+  $("fMail").classList.toggle("err", !okMail);
+  if (!okName || !okMail) return;
+  $("who").textContent = name + " · " + mail;
+  goStep(2);
+});
+$("back2").addEventListener("click", () => goStep(1));
+
+function makeCode(){
+  const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = "";
+  const r = crypto.getRandomValues(new Uint32Array(8));
+  for (let i = 0; i < 8; i++) s += c[r[i] % c.length];
+  return "ZWO-" + s.slice(0,4) + "-" + s.slice(4);
+}
+$("payBtn").addEventListener("click", () => {
+  const code = makeCode();
+  $("tName").textContent = $("inName").value.trim();
+  $("tMail").textContent = $("inMail").value.trim();
+  $("tCode").textContent = code;
+  const q = qrcode(0, "M"); q.addData(code); q.make();
+  $("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+  goStep(3);
+});
+$("doneBtn").addEventListener("click", () => { closeSheet(); $("step1").reset(); });
 </script>
 </body>
 </html>
