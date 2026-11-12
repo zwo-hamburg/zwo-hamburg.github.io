@@ -615,6 +615,8 @@ $("back2").addEventListener("click", () => goStep(1));
 /* ---------- Verkauf noch nicht gestartet ---------- */
 if (!TICKETS_ON_SALE) {
   document.querySelectorAll("[data-ticket]").forEach(b => { b.textContent = "Bald"; b.classList.add("soon"); b.tabIndex = -1; });
+  document.querySelectorAll("[data-price]").forEach(el => el.textContent = "31.12.2026");   // Preise noch nicht zeigen
+  document.querySelectorAll(".t-sub").forEach(el => el.textContent = el.textContent.replace("31.12.2026 · ", ""));
   document.querySelector(".scroll-hint").textContent = "↓ Tickets bald";
 } else {
   $("notify").remove();
