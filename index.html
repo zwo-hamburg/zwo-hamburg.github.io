@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZWO – Silvester 2026</title>
+<meta name="description" content="ZWO · 31.12.2026 · ab 23.59 Uhr">
+<meta name="theme-color" content="#f4f0e8">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+  /* ============================================================
+     EINSTELLUNGEN – hier kannst du Farben/Größen leicht ändern
+     ============================================================ */
+  :root {
+    --page:      #f4f0e8;   /* Hintergrund der Seite            */
+    --paper:     #ebe3d3;   /* Umschlag außen                   */
+    --paper-in:  #dcd2bf;   /* Umschlag innen                   */
+    --letter:    #f3eee3;   /* Brief                            */
+    --ink-blue:  #2430c9;   /* Blaue Handschrift                */
+    --ink:       #26231f;   /* Schreibmaschinen-Schrift         */
+  }
+
+  @font-face { font-family: "Typewriter";  src: url("typewriter.woff2") format("woff2"); font-display: swap; }
+  @font-face { font-family: "Handwriting"; src: url("handwriting.woff2") format("woff2"); font-display: swap; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--page);
+    background-image: radial-gradient(ellipse at 50% 40%, #faf8f3 0%, var(--page) 70%);
+    font-family: "Typewriter", "Courier New", monospace;
+    color: var(--ink);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .scene {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: calc(24px + env(safe-area-inset-top)) env(safe-area-inset-right) calc(24px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  }
+
+  /* Größe des Umschlags: passt sich Handy & Laptop an */
+  .envelope {
+    --w: min(90vw, 540px, 70svh);
+    --h: calc(var(--w) * 0.66);
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    perspective: 1600px;
+    cursor: pointer;
+    outline: none;
+    transition: transform 1s cubic-bezier(.2,.7,.2,1) .85s;
+    animation: float 4.5s ease-in-out infinite;
+  }
+  .envelope:focus-visible { outline: 2px dashed var(--ink-blue); outline-offset: 10px; }
+  @keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+  .envelope.open { cursor: default; animation: none; transform: translateY(calc(var(--h) * 0.21)); }
+
+  /* Papier-Struktur (feines Rauschen) */
+  .paper {
+    position: absolute; inset: 0;
+    background-color: var(--c);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .22  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Die einzelnen Teile des Umschlags */
+  .part { position: absolute; inset: 0; }
+  .torn  { filter: url(#torn); }
+
+  .back   { z-index: 0; filter: url(#torn) drop-shadow(0 14px 22px rgba(60,45,25,.18)) drop-shadow(0 2px 3px rgba(60,45,25,.15)); }
+  .back .paper { --c: var(--paper-in); }
+
+  .letter {
+    z-index: 2;
+    left: 7%; right: 7%; top: 5%; bottom: 4%;
+    transition: transform 1.1s cubic-bezier(.25,.8,.25,1) .85s;
+  }
+  .letter .sheet { filter: url(#torn-fine) drop-shadow(0 -2px 6px rgba(60,45,25,.12)); position:absolute; inset:0; }
+  .letter .sheet .paper { --c: var(--letter); }
+  .envelope.open .letter { transform: translateY(calc(var(--h) * -0.42)); }
+
+  .letter-content {
+    position: absolute; left: 0; right: 0; top: 8%;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .6s ease 1.3s;
+  }
+  .envelope.open .letter-content { opacity: 1; }
+
+  .buy {
+    font-family: "Handwriting", cursive;
+    color: var(--ink-blue);
+    font-size: calc(var(--w) * 0.19);
+    line-height: .9;
+    text-decoration: none;
+    position: relative;
+    padding: 0 .12em .08em;
+    pointer-events: none;
+    transform: rotate(-3deg);
+    display: inline-block;
+    transition: transform .25s ease;
+  }
+  .envelope.ready .buy { pointer-events: auto; cursor: pointer; }
+  .buy:hover, .buy:focus-visible { transform: rotate(-1deg) scale(1.04); outline: none; }
+  .buy svg { position: absolute; left: 4%; right: 4%; bottom: -.04em; width: 92%; height: .2em; overflow: visible; }
+  .buy svg path { stroke: var(--ink-blue); stroke-width: 3.2; fill: none; stroke-linecap: round;
+                  stroke-dasharray: 400; stroke-dashoffset: 400; transition: stroke-dashoffset .9s ease 1.9s; }
+  .envelope.open .buy svg path { stroke-dashoffset: 0; }
+
+  .date {
+    margin-top: calc(var(--w) * 0.045);
+    font-size: calc(var(--w) * 0.042);
+    letter-spacing: .08em;
+    line-height: 1.55;
+    text-transform: uppercase;
+  }
+  .note {
+    margin-top: calc(var(--w) * 0.02);
+    font-size: calc(var(--w) * 0.026);
+    opacity: 0; transition: opacity .3s;
+    color: var(--ink-blue);
+  }
+  .note.show { opacity: 1; }
+
+  .pocket { z-index: 3; filter: url(#torn) drop-shadow(0 -1px 2px rgba(60,45,25,.18)); pointer-events: none; }
+  .pocket .shape { position: absolute; inset: 0; clip-path: polygon(0 0, 50% 57%, 100% 0, 100% 100%, 0 100%); }
+  .pocket .paper { --c: var(--paper); }
+  .pocket .bottom {
+    position: absolute; inset: 0;
+    clip-path: polygon(0 100%, 50% 47%, 100% 100%);
+    background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,.05));
+  }
+  .pocket .sides {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom right, rgba(80,60,30,.07), transparent 60%) left / 50% 100% no-repeat,
+      linear-gradient(to bottom left,  rgba(80,60,30,.07), transparent 60%) right / 50% 100% no-repeat;
+  }
+
+  .flap {
+    z-index: 4;
+    height: 63%;
+    transform-origin: 50% 0;
+    transform: rotateX(0deg);
+    filter: url(#torn) drop-shadow(0 4px 4px rgba(60,45,25,.16));
+    transition: transform .8s cubic-bezier(.45,.05,.3,1) .2s, z-index 0s linear .6s, filter 0s linear .6s;
+  }
+  .flap .shape { position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+  .flap .paper { --c: var(--paper); }
+  .envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+    filter: url(#torn) brightness(.93);
+  }
+
+  /* Logo vorne drauf */
+  .logo {
+    position: absolute; z-index: 5;
+    width: 72%;
+    aspect-ratio: 950 / 590;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity .45s ease, transform .45s ease;
+    pointer-events: none;
+  }
+  .envelope.open .logo { opacity: 0; transform: translate(-50%, -46%) scale(.94); }
+  .logo img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    animation: var(--anim) var(--dur) ease-in-out var(--delay) infinite alternate;
+    transform-origin: var(--ox) var(--oy);
+    will-change: transform;
+    filter: drop-shadow(0 1px 0.6px rgba(40,25,10,.22));
+  }
+  .f-purple { --anim: sway;   --dur: 3.6s; --delay: -1.2s; --ox: 22%; --oy: 80%; --r: 1.6deg; }
+  .f-red    { --anim: swayUp; --dur: 3.1s; --delay: -0.4s; --ox: 24%; --oy: 49%; --r: 2.4deg; }
+  .f-pink   { --anim: reach;  --dur: 2.8s; --delay: -2.0s; --ox: 50%; --oy: 63%; --r: 1deg; }
+  .f-green  { --anim: sway;   --dur: 4.2s; --delay: -0.9s; --ox: 50%; --oy: 92%; --r: -1.3deg; }
+  .f-yellow { --anim: sway;   --dur: 3.4s; --delay: -2.6s; --ox: 73%; --oy: 50%; --r: 2.6deg; }
+  .f-orange { --anim: sway;   --dur: 3.9s; --delay: -1.7s; --ox: 88%; --oy: 58%; --r: -2.6deg; }
+
+  @keyframes sway   { from { transform: rotate(calc(var(--r) * -1)); } to { transform: rotate(var(--r)); } }
+  @keyframes swayUp { from { transform: rotate(calc(var(--r) * -1)) translateY(0.6%); } to { transform: rotate(var(--r)) translateY(-0.8%); } }
+  @keyframes reach  { from { transform: scaleY(.985) rotate(calc(var(--r) * -1)); } to { transform: scaleY(1.03) rotate(var(--r)); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo img, .envelope { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Filter für die gerissenen Papierkanten -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="torn" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="7" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="torn-fine" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="3" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<main class="scene">
+  <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Einladung öffnen">
+
+    <div class="part back"><div class="paper"></div></div>
+
+    <div class="part letter">
+      <div class="sheet"><div class="paper"></div></div>
+      <div class="letter-content">
+        <a class="buy" id="buy" href="#" tabindex="-1">
+          Buy ticket
+          <svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M3 12 C 40 4, 80 16, 120 9 S 180 6, 197 11"/>
+          </svg>
+        </a>
+        <p class="date">31.12.2026<br>ab 23.59 Uhr</p>
+        <p class="note" id="note">Ticketshop öffnet bald</p>
+      </div>
+    </div>
+
+    <div class="part pocket">
+      <div class="shape"><div class="paper"></div><div class="sides"></div><div class="bottom"></div></div>
+    </div>
+
+    <div class="part flap"><div class="shape"><div class="paper"></div></div></div>
+
+    <div class="logo" aria-hidden="true">
+      <img class="f-purple" src="fig-purple.png" alt="">
+      <img class="f-red"    src="fig-red.png"    alt="">
+      <img class="f-pink"   src="fig-pink.png"   alt="">
+      <img class="f-green"  src="fig-green.png"  alt="">
+      <img class="f-yellow" src="fig-yellow.png" alt="">
+      <img class="f-orange" src="fig-orange.png" alt="">
+    </div>
+  </div>
+</main>
+
+<script>
+  /* ============================================================
+     HIER DEN LINK ZU DEINEM TICKETSHOP EINTRAGEN (zwischen die "")
+     Beispiel: "https://pretix.eu/zwo/silvester2026/"
+     ============================================================ */
+  const TICKET_URL = "";
+
+  const env  = document.getElementById("envelope");
+  const buy  = document.getElementById("buy");
+  const note = document.getElementById("note");
+
+  function openEnvelope() {
+    if (env.classList.contains("open")) return;
+    env.classList.add("open");
+    env.removeAttribute("role");
+    env.setAttribute("aria-label", "Einladung");
+    setTimeout(() => {
+      env.classList.add("ready");
+      buy.tabIndex = 0;
+    }, 1700);
+  }
+
+  env.addEventListener("click", openEnvelope);
+  env.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openEnvelope(); }
+  });
+
+  if (TICKET_URL) buy.href = TICKET_URL;
+  buy.addEventListener("click", e => {
+    if (!TICKET_URL) { e.preventDefault(); note.classList.add("show"); }
+  });
+</script>
+</body>
+</html>
