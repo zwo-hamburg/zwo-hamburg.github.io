@@ -326,72 +326,68 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 
 /* ==================================================================
-   STIL: wie die Insta-Story (Salbeigrün, Tänzer, Handschrift)
+   TICKETSEITE – Riso-Look wie die Insta-Story (grün, pink/gelbe Würmer)
    ================================================================== */
-@font-face{font-family:"Hand";src:url("hand.woff2") format("woff2");font-display:swap}
-@font-face{font-family:"Anton";src:url("anton.woff2") format("woff2");font-display:swap}
-:root{--sage:#9ba580;--ink:#141414;--red:#6e1717;--paper:#f2efe6}
-#shop{background:var(--sage);color:var(--ink)}
-#shop::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.5;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.nav{background:rgba(155,165,128,.9)}
-.nav-links span.age{border-color:var(--ink)}
-.big-logo{min-height:0;padding:6px 0 0}
-.bw-logo{width:62%;max-width:420px;margin:2% auto 0}
-.dance{max-width:560px;margin:-2% auto 0}
-.dance video{display:block;width:100%;height:auto;aspect-ratio:720/600;background:var(--sage)}
-.afters-word{display:block;width:78%;max-width:440px;margin:6px auto 26px}
-.scroll-hint{color:var(--ink)}
-.marquee{border-color:var(--ink)}
-.marquee div{color:var(--ink)}
-/* Überschriften in roter Handschrift */
-.hero h1,.notify h2{font-family:"Hand";color:var(--red);font-weight:400;letter-spacing:.01em;text-transform:uppercase;
-  -webkit-text-stroke:.6px var(--red)}
-.hero h1{font-size:clamp(58px,17vw,96px);line-height:.95}
-.hero p{font-family:"Typewriter",monospace;color:var(--ink);font-size:12.5px;line-height:1.6}
-.notify h2{font-size:clamp(38px,11vw,54px);line-height:1}
-/* gezeichnete Linien (leicht krakelig) */
-.notify,.ticket,.cd div{position:relative;border:0!important;background:transparent}
-.notify::before,.ticket::before,.cd div::before{content:"";position:absolute;inset:0;border:2px solid var(--ink);
-  border-radius:3px;filter:url(#torn-fine);pointer-events:none}
-.notify{padding:24px 20px 22px}
-.notify-tag{background:var(--ink);color:var(--paper)}
-.notify-text,.notify-small{color:#2a2a22}
-.cd div{padding:12px 4px 9px}
-.cd b{font-family:"Anton";font-weight:400;letter-spacing:.01em}
-.field{border-color:var(--ink)}
-.field input::placeholder{color:#5d6449}
-.pill{border-color:var(--ink)}
-.pill.solid{background:var(--ink);color:var(--paper)}
-/* Tickets: Papier mit Zeichen-Rahmen */
-.ticket{background:var(--paper)!important}
-.t-head h2{font-family:"Hand";color:var(--red);font-weight:400;text-transform:uppercase;font-size:clamp(30px,8.6vw,38px);
-  letter-spacing:.01em;-webkit-text-stroke:.5px var(--red);line-height:.95}
-.t-sub{font-family:"Typewriter",monospace;font-size:12px}
-.badge{background:none;width:64px;height:44px}
-.badge i{width:64px;background:none;-webkit-mask:none;mask:none;aspect-ratio:auto;height:40px;
-  background:url("logo-color.png") center/contain no-repeat}
-.t-main hr{border-top:1.5px solid var(--ink)}
-.t-price{font-family:"Anton";font-weight:400;font-size:clamp(34px,10vw,44px);letter-spacing:.01em}
-.t-stub{border-left:2px dashed var(--ink)}
-.t-stub::before,.t-stub::after{background:var(--sage);border:2px solid var(--ink)}
-.ticket .pill:not(.soon){background:var(--ink);color:var(--paper)}
-.footer{color:var(--ink)}
-.chips span{border-color:var(--ink)}
-.footer-quote{font-family:"Hand";color:var(--red);text-transform:uppercase;font-size:clamp(28px,8vw,40px);
-  -webkit-text-stroke:.5px var(--red);text-align:center;line-height:1.05;margin:40px 0 4px}
-
-/* Kopf wie die Story: Logo, AFTERS, große Infos, Tänzer darunter */
-.bw-logo{width:58%;max-width:400px;margin:2% auto 0}
-.afters-word{width:74%;max-width:440px;margin:8px auto 14px}
-.sale-big{text-align:center;margin:0 auto 6px;max-width:560px}
-.sb-hand{font-family:"Hand";color:var(--red);text-transform:uppercase;-webkit-text-stroke:.6px var(--red);
-  font-size:clamp(40px,12.4vw,70px);line-height:1.05;letter-spacing:.01em}
-.sb-hand .sb-2{font-size:1.18em}
-.sb-rule{border:0;border-top:1.5px solid var(--ink);width:88%;margin:12px auto 12px}
-.sb-tw{font-family:"Typewriter",monospace;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(13px,4vw,18px);color:var(--ink);line-height:1.6}
-.sb-tw.sm{font-size:clamp(10.5px,3.1vw,14px);letter-spacing:.12em}
-.dance{max-width:470px;width:84%;margin:8px auto 0}
+@font-face{font-family:"Any";src:url("Anybody.ttf") format("truetype");font-weight:100 900;font-stretch:50% 150%;font-display:swap}
+#shop{--g:#28965a;--w:#fafaf6;--paper:#f6f1e4;--deep:#163d27;background:var(--g);color:var(--w);font-family:"Inter",system-ui,sans-serif;letter-spacing:-.03em;isolation:isolate}
+.rz-ink{position:fixed;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:url(ink0.jpg) center/cover;
+  animation:boil 1.2s steps(1) infinite}
+@keyframes boil{0%{background-image:url(ink0.jpg)}16.66%{background-image:url(ink1.jpg)}33.33%{background-image:url(ink2.jpg)}
+  50%{background-image:url(ink3.jpg)}66.66%{background-image:url(ink4.jpg)}83.33%{background-image:url(ink5.jpg)}}
+@media (prefers-reduced-motion:reduce){.rz-ink{animation:none}}
+#shop .nav{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;position:relative}
+#shop .back-btn{color:var(--w)}
+#shop .nav-links span.age{border-color:var(--w)}
+.rz{position:relative;max-width:560px}
+.rz-title{font-family:"Any";font-weight:900;font-stretch:50%;line-height:.78;letter-spacing:-.01em;text-align:center;white-space:nowrap;
+  font-size:26.5vw;transform:scaleY(1.55);transform-origin:top;margin:6px 0 calc(13vw + 12px)}
+@media(min-width:600px){.rz-title{font-size:180px;margin-bottom:90px}}
+.rz-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px}
+.rz-side{font-size:13px;line-height:1.05}.rz-side b{display:block;font-weight:400;font-size:clamp(17px,5vw,22px);margin-top:3px}
+.rz-time{font-size:clamp(26px,7.7vw,38px);display:flex;align-items:center;white-space:nowrap}
+.rz-time svg{width:.95em;height:.4em;margin:0 3px}
+.rz-big{font-weight:500;font-size:clamp(96px,30vw,170px);line-height:.86;letter-spacing:-.065em}
+.rz-big .b2{text-align:right}
+.rz-list{text-align:center;font-size:clamp(22px,6.9vw,34px);line-height:1.08;margin:30px 0 12px;scroll-margin-top:20px}
+.rz-list sup{font-size:.4em;vertical-align:top;position:relative;top:.2em}
+.rz-small{text-align:center;font-size:clamp(15px,4.6vw,20px);line-height:1.15;margin-bottom:22px}
+.rz-hidden{display:none}
+#shop .scroll-hint{color:var(--w);font-size:12px;letter-spacing:.1em;margin:0 auto 10px}
+.rz-h2{font-weight:500;font-size:clamp(52px,16vw,80px);letter-spacing:-.06em;line-height:.9;margin:40px 0 16px}
+#shop .notify{border:0;background:none;padding:0;margin:0}
+#shop .cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:none;margin:6px 0 8px}
+#shop .cd div{border:1.5px solid var(--w);background:none;text-align:center;padding:10px 0 7px;border-radius:14px}
+#shop .cd b{font-size:clamp(34px,10.7vw,50px);font-weight:500;letter-spacing:-.05em;line-height:1}
+#shop .cd span{font-size:11px;letter-spacing:.02em;text-transform:none;margin-top:2px;font-family:inherit}
+#shop .cd-when{text-align:center;font-size:15px;margin:10px 0 18px;letter-spacing:-.01em;text-transform:none}
+#shop .notify-text{color:var(--w);font-size:15px;line-height:1.4;margin-bottom:4px}
+#shop .field{border-bottom:1.5px solid var(--w);margin:10px 0 16px}
+#shop .field span{font-size:12px;letter-spacing:0;text-transform:none;opacity:.9}
+#shop .field input{color:var(--w);font-size:22px}
+#shop .field input::placeholder{color:var(--w);opacity:.55}
+#shop .notify-small{color:var(--w);opacity:.85;font-size:11px}
+#shop .notify-msg{font-size:13px;letter-spacing:0}
+.rz-btn{display:block;width:100%;border:0;border-radius:99px;background:var(--w);color:var(--deep);font:inherit;font-weight:600;font-size:17px;padding:16px;letter-spacing:-.01em;cursor:pointer}
+/* Tickets: Papierkarten ÜBER der Würmer-Schicht -> gut lesbar */
+#shop .tickets{position:relative;z-index:4;display:grid;gap:14px;padding:0 0 10px}
+#shop .ticket{display:flex;background:var(--paper);color:var(--deep);border:0;border-radius:22px;overflow:hidden;min-height:0}
+#shop .t-main{flex:1;padding:20px 18px 16px 20px;display:flex;flex-direction:column}
+#shop .ticket h3{font-weight:500;font-size:clamp(34px,10.5vw,44px);line-height:.9;letter-spacing:-.06em}
+#shop .t-sub{font-size:14px;margin-top:7px}
+#shop .t-price{font-weight:500;font-size:clamp(48px,15vw,66px);letter-spacing:-.06em;line-height:1;margin:16px 0 12px}
+#shop .t-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:auto;padding-top:0}
+#shop .t-small{font-size:12px;line-height:1.25;text-transform:none;letter-spacing:0;max-width:none}
+#shop .ticket .pill{border:0;border-radius:99px;padding:12px 20px;font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none;
+  background:var(--deep);color:var(--paper);cursor:pointer}
+#shop .ticket .pill.soon{opacity:.55}
+#shop .t-stub{width:58px;border-left:2px dashed var(--deep);background:url(ink2.jpg) 30% 40%/600px auto;display:flex;align-items:center;justify-content:center;padding:0}
+#shop .t-stub::before,#shop .t-stub::after{content:none}
+#shop .t-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:"Any";font-weight:900;font-stretch:50%;font-size:32px;color:var(--deep);letter-spacing:.01em}
+.rz-foot{margin:44px 0 0;padding-bottom:calc(30px + var(--safe-b))}
+.rz-foot .r{display:flex;justify-content:space-between;font-size:clamp(17px,5.2vw,24px)}
+.rz-foot .addr{font-size:clamp(40px,12.6vw,62px);letter-spacing:-.06em;line-height:1;white-space:nowrap}
+.rz-foot .city{font-size:15px;margin-top:4px}
+.rz-foot img{display:block;margin:18px auto 0;height:24px}
 </style>
 </head>
 <body>
@@ -459,51 +455,38 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <!-- ========================= 2) TICKET-SEITE ========================= -->
 <section id="shop" aria-hidden="true">
+  <div class="rz-ink" aria-hidden="true"></div>
   <header class="nav">
     <div class="wrap">
       <button class="back-btn" id="backBtn" aria-label="Zurück zum Brief">
-        <svg viewBox="0 0 26 26" fill="none" stroke="#000" stroke-width="1.6"><path d="M24 13H3M11 5l-8 8 8 8"/></svg>
+        <svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M24 13H3M11 5l-8 8 8 8"/></svg>
       </button>
       <div class="nav-links"><span class="on">Tickets</span><span>ZWO-AFTERS</span><span class="age">18+</span></div>
     </div>
   </header>
 
-  <div class="wrap">
-    <div class="big-logo"><div class="bw-logo" role="img" aria-label="ZWO-AFTERS">
-      <img class="f-purple" src="fig-purple.png" alt="">
-      <img class="f-red"    src="fig-red.png"    alt="">
-      <img class="f-pink"   src="fig-pink.png"   alt="">
-      <img class="f-green"  src="fig-green.png"  alt="">
-      <img class="f-yellow" src="fig-yellow.png" alt="">
-      <img class="f-orange" src="fig-orange.png" alt="">
-    </div></div>
-    <img class="afters-word" src="afters.png" alt="AFTERS">
-    <div class="sale-big">
-      <p class="sb-hand" id="sbHand"><span id="sbL1">Tickets ab</span><br><span class="sb-2" id="sbL2">20.11. · 10 Uhr</span></p>
-      <hr class="sb-rule">
-      <p class="sb-tw">31.12.2026 · 23:59 – 6:00</p>
-      <p class="sb-tw sm">Otto-Ernst-Str. 32 · Hamburg · 18+</p>
+  <div class="wrap rz">
+    <h1 class="rz-title" aria-label="ZWO AFTERS"><span>ZWO AFTERS</span></h1>
+    <div class="rz-row">
+      <div class="rz-side"><span id="rzS1">Tickets ab</span><b id="rzS2">20.11. · 10 Uhr</b></div>
+      <div class="rz-time">23:59<svg viewBox="0 0 120 40" aria-hidden="true"><path d="M5 20 Q 18 4 31 20 T 57 20 T 83 20 T 109 20" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg>6:00</div>
     </div>
-    <div class="dance"><video src="tanz.mp4" poster="tanz.jpg" autoplay muted loop playsinline preload="auto" aria-label="Drei Figuren tanzen auf DJ-Pulten: and through it all we will dance"></video></div>
-    <a class="scroll-hint mono" href="#tickets">↓ Tickets</a>
-    <div class="marquee" aria-hidden="true"><div class="mono" id="mq"></div></div>
-
-    <div class="hero" id="tickets">
-      <h1>Tickets</h1>
-      <p><b>ZWO-AFTERS</b> – Silvester. 31.12.2026, ab 23.59 Uhr.<br><b>Einlass ab 18 Jahren (18+)</b> – bitte Ausweis mitbringen.<br>Otto-Ernst-Straße 32, Hamburg.<br>Early Bird: Einlass bis 1:00 Uhr.<br>Ein Ticket pro Person – dein Name steht auf dem Ticket und wird am Einlass gescannt.<br><b id="saleNote">Tickets sind noch nicht erhältlich.</b></p>
-    </div>
+    <div class="rz-big" aria-hidden="true"><div>after</div><div class="b2">party</div></div>
+    <div class="rz-list" id="tickets">Einlass ab 23:59<br>18+ · Ausweis mitbringen<br>Einlass bis 1:00<sup>(Early Bird)</sup><br>Ein Ticket pro Person<br>Name auf dem Ticket<br>QR-Code am Einlass</div>
+    <div class="rz-small">Line Up<br>Nicki Wenzler · Kurt Kroschewski<br>Hugo Supper · Hugo b2b Kurt</div>
+    <p class="rz-hidden"><span id="saleNote"></span></p>
+    <a class="scroll-hint" href="#tixHead">↓ Tickets</a>
+    <div class="marquee" aria-hidden="true" hidden><div id="mq"></div></div>
 
     <section class="notify" id="notify">
-      <p class="notify-tag mono">Noch nicht im Verkauf</p>
-      <h2>Tickets gibt es bald.</h2>
+      <h2 class="rz-h2">Tickets<br>gibt's bald.</h2>
       <div class="cd" id="cd" aria-live="off">
-        <div><b id="cdD">00</b><span class="mono">Tage</span></div>
-        <div><b id="cdH">00</b><span class="mono">Std</span></div>
-        <div><b id="cdM">00</b><span class="mono">Min</span></div>
-        <div><b id="cdS">00</b><span class="mono">Sek</span></div>
+        <div><b id="cdD">00</b><span>Tage</span></div>
+        <div><b id="cdH">00</b><span>Std</span></div>
+        <div><b id="cdM">00</b><span>Min</span></div>
+        <div><b id="cdS">00</b><span>Sek</span></div>
       </div>
-      <p class="cd-when mono">Verkauf ab 20.11. · 10 Uhr</p>
-      <p class="notify-tag mono" style="margin:0 0 10px;background:#fff;color:#000;border:1px solid #000">ZWO-AFTERS · 18+</p>
+      <p class="cd-when">Verkauf ab 20.11. · 10 Uhr</p>
       <p class="notify-text">Trag deine E-Mail-Adresse ein – wir schreiben dir, sobald die Tickets online sind.</p>
       <form id="notifyForm" novalidate>
         <label class="field" id="fNotify"><span>E-Mail-Adresse</span>
@@ -512,60 +495,45 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
         <input type="hidden" name="locale" value="de">
         <input type="hidden" name="html_type" value="simple">
-        <button class="pill solid wide" type="submit" id="notifyBtn">Benachrichtige mich</button>
+        <button class="rz-btn" type="submit" id="notifyBtn">Benachrichtige mich</button>
         <p class="notify-small">Wir nutzen deine Adresse nur, um dir Bescheid zu geben, wenn die Tickets online sind. Abmelden geht jederzeit.</p>
-        <p class="notify-msg mono" id="notifyMsg" role="status"></p>
+        <p class="notify-msg" id="notifyMsg" role="status"></p>
       </form>
     </section>
 
+    <h2 class="rz-h2" id="tixHead">Tickets</h2>
     <div class="tickets">
       <article class="ticket">
         <div class="t-main">
-          <div class="t-head">
-            <div><h2>Early Bird</h2><p class="t-sub">31.12.2026 · Einlass bis 1:00 Uhr</p></div>
-            <div class="badge" aria-hidden="true"><i></i></div>
-          </div>
-          <hr>
+          <h3>Early Bird</h3>
+          <p class="t-sub">31.12.2026 · Einlass bis 1:00 Uhr</p>
           <p class="t-price" data-price="early">10 €</p>
           <div class="t-foot">
-            <p class="t-small">18+ · Einlass nur bis 1:00 Uhr · zzgl. 1,25 € Gebühr</p>
+            <p class="t-small">18+ · zzgl. 1,25 € Gebühr</p>
             <button class="pill" data-ticket="early">Buy now</button>
           </div>
         </div>
-        <div class="t-stub" aria-hidden="true">
-          <span class="t-vert">ZWO-AFTERS · 18+<br>Otto-Ernst-Str. 32 · HH</span>
-          <svg class="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
-        </div>
+        <div class="t-stub" aria-hidden="true"><span>ZWO AFTERS</span></div>
       </article>
-
       <article class="ticket">
         <div class="t-main">
-          <div class="t-head">
-            <div><h2>Normales<br>Ticket</h2><p class="t-sub">31.12.2026 · ab 23.59 Uhr</p></div>
-            <div class="badge" aria-hidden="true"><i></i></div>
-          </div>
-          <hr>
+          <h3>Normales<br>Ticket</h3>
+          <p class="t-sub">31.12.2026 · Einlass jederzeit</p>
           <p class="t-price" data-price="normal">13 €</p>
           <div class="t-foot">
-            <p class="t-small">18+ · Einlass jederzeit · zzgl. 1,25 € Gebühr</p>
+            <p class="t-small">18+ · zzgl. 1,25 € Gebühr</p>
             <button class="pill" data-ticket="normal">Buy now</button>
           </div>
         </div>
-        <div class="t-stub" aria-hidden="true">
-          <span class="t-vert">ZWO-AFTERS · 18+<br>Otto-Ernst-Str. 32 · HH</span>
-          <svg class="barcode" viewBox="0 0 26 120" preserveAspectRatio="none"></svg>
-        </div>
+        <div class="t-stub" aria-hidden="true"><span>ZWO AFTERS</span></div>
       </article>
     </div>
 
-    
-
-    
-
-    <p class="footer-quote">And through it all<br>we will dance</p>
-    <footer class="footer">
-      <span>→ ZWO-AFTERS · Otto-Ernst-Straße 32, Hamburg</span>
-      <div class="chips"><span>ZWO-AFTERS</span><span>31.12</span><span>23.59</span><span>18+</span></div>
+    <footer class="rz-foot">
+      <div class="r"><span>Do 31.12.</span><span>Silvester 2026</span></div>
+      <div class="addr">Otto-Ernst-Str. 32</div>
+      <p class="city">Hamburg</p>
+      <img src="logo-w.png" alt="ZWO">
     </footer>
   </div>
 </section>
@@ -656,7 +624,7 @@ $("toShop").addEventListener("click", e => {
   shop.style.setProperty("--cx", lastX); shop.style.setProperty("--cy", lastY);
   shop.scrollTop = 0;
   shop.classList.add("show"); shop.setAttribute("aria-hidden","false");
-  $("themeColor").content = "#ffffff";
+  $("themeColor").content = "#28965a";
 });
 $("backBtn").addEventListener("click", () => {
   shop.style.setProperty("--cx", "40px"); shop.style.setProperty("--cy", "40px");
@@ -728,8 +696,8 @@ if (!TICKETS_ON_SALE) {
 } else {
   $("notify").remove();
   $("saleNote").remove();
-  $("sbL1").textContent = "Tickets";
-  $("sbL2").textContent = "jetzt online";
+  $("rzS1").textContent = "Tickets";
+  $("rzS2").textContent = "jetzt online";
 }
 
 $("notifyForm") && $("notifyForm").addEventListener("submit", async e => {
