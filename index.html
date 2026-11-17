@@ -331,11 +331,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    TICKETSEITE – Riso-Look wie die Insta-Story (grün, pink/gelbe Würmer)
    ================================================================== */
 @font-face{font-family:"Any";src:url("Anybody.ttf") format("truetype");font-weight:100 900;font-stretch:50% 150%;font-display:swap}
-#shop{--g:#28965a;--w:#fafaf6;--paper:#f6f1e4;--deep:#163d27;background:var(--g);color:var(--w);font-family:"Inter",system-ui,sans-serif;letter-spacing:-.03em;isolation:isolate}
-.rz-page{position:relative;min-height:100%}
-.rz-ink{position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;
-  background:url(ink-tile.jpg) center top/100% auto repeat-y}
-@media(min-width:700px){.rz-ink{background-size:700px auto}}
+#shop{--g:#28965a;--w:#fafaf6;--paper:#f6f1e4;--deep:#163d27;background:var(--g);color:var(--w);font-family:"Inter",system-ui,sans-serif;letter-spacing:-.03em}
+.rz-page{position:relative;min-height:100%;background:#28965a url(bg-tile.jpg) center top/100% auto repeat-y}
+@media(min-width:700px){.rz-page{background-size:700px auto}}
+.rz-ink{display:none}
+/* bunte Schrift ohne Überblenden (funktioniert auf jedem Handy) */
+.rz-title span,.rz-big div,.rz-h2{background:url(txt-tile.jpg) center 30%/560px auto;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent}
+.rz-big .b2{background-position:70% 55%}
+#tixHead{background-position:20% 80%}
 #shop .nav{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;position:relative}
 #shop .back-btn{color:var(--w)}
 #shop .nav-links span.age{border-color:var(--w)}
@@ -381,7 +385,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #shop .ticket .pill{border:0;border-radius:99px;padding:12px 20px;font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none;
   background:var(--deep);color:var(--paper);cursor:pointer}
 #shop .ticket .pill.soon{opacity:.55}
-#shop .t-stub{width:58px;border-left:2px dashed var(--deep);background:url(ink-tile.jpg) 30% 40%/600px auto;display:flex;align-items:center;justify-content:center;padding:0}
+#shop .t-stub{width:58px;border-left:2px dashed var(--deep);background:url(txt-tile.jpg) 30% 40%/600px auto;display:flex;align-items:center;justify-content:center;padding:0}
 #shop .t-stub::before,#shop .t-stub::after{content:none}
 #shop .t-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:"Any";font-weight:900;font-stretch:50%;font-size:32px;color:var(--deep);letter-spacing:.01em}
 .rz-foot{margin:44px 0 0;padding-bottom:calc(30px + var(--safe-b))}
