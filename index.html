@@ -324,6 +324,74 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @media (prefers-reduced-motion:reduce){
   .logo img,.bw-logo img,.envelope,#intro::after,.marquee div,.scroll-hint{animation:none!important}
 }
+
+/* ==================================================================
+   STIL: wie die Insta-Story (Salbeigrün, Tänzer, Handschrift)
+   ================================================================== */
+@font-face{font-family:"Hand";src:url("hand.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"Anton";src:url("anton.woff2") format("woff2");font-display:swap}
+:root{--sage:#9ba580;--ink:#141414;--red:#6e1717;--paper:#f2efe6}
+#shop{background:var(--sage);color:var(--ink)}
+#shop::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:6;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .25 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.nav{background:rgba(155,165,128,.9)}
+.nav-links span.age{border-color:var(--ink)}
+.big-logo{min-height:0;padding:6px 0 0}
+.bw-logo{width:62%;max-width:420px;margin:2% auto 0}
+.dance{max-width:560px;margin:-2% auto 0}
+.dance video{display:block;width:100%;height:auto;aspect-ratio:720/600;background:var(--sage)}
+.afters-word{display:block;width:78%;max-width:440px;margin:6px auto 26px}
+.scroll-hint{color:var(--ink)}
+.marquee{border-color:var(--ink)}
+.marquee div{color:var(--ink)}
+/* Überschriften in roter Handschrift */
+.hero h1,.notify h2{font-family:"Hand";color:var(--red);font-weight:400;letter-spacing:.01em;text-transform:uppercase;
+  -webkit-text-stroke:.6px var(--red)}
+.hero h1{font-size:clamp(58px,17vw,96px);line-height:.95}
+.hero p{font-family:"Typewriter",monospace;color:var(--ink);font-size:12.5px;line-height:1.6}
+.notify h2{font-size:clamp(38px,11vw,54px);line-height:1}
+/* gezeichnete Linien (leicht krakelig) */
+.notify,.ticket,.cd div{position:relative;border:0!important;background:transparent}
+.notify::before,.ticket::before,.cd div::before{content:"";position:absolute;inset:0;border:2px solid var(--ink);
+  border-radius:3px;filter:url(#torn-fine);pointer-events:none}
+.notify{padding:24px 20px 22px}
+.notify-tag{background:var(--ink);color:var(--paper)}
+.notify-text,.notify-small{color:#2a2a22}
+.cd div{padding:12px 4px 9px}
+.cd b{font-family:"Anton";font-weight:400;letter-spacing:.01em}
+.field{border-color:var(--ink)}
+.field input::placeholder{color:#5d6449}
+.pill{border-color:var(--ink)}
+.pill.solid{background:var(--ink);color:var(--paper)}
+/* Tickets: Papier mit Zeichen-Rahmen */
+.ticket{background:var(--paper)!important}
+.t-head h2{font-family:"Hand";color:var(--red);font-weight:400;text-transform:uppercase;font-size:clamp(30px,8.6vw,38px);
+  letter-spacing:.01em;-webkit-text-stroke:.5px var(--red);line-height:.95}
+.t-sub{font-family:"Typewriter",monospace;font-size:12px}
+.badge{background:none;width:64px;height:44px}
+.badge i{width:64px;background:none;-webkit-mask:none;mask:none;aspect-ratio:auto;height:40px;
+  background:url("logo-color.png") center/contain no-repeat}
+.t-main hr{border-top:1.5px solid var(--ink)}
+.t-price{font-family:"Anton";font-weight:400;font-size:clamp(34px,10vw,44px);letter-spacing:.01em}
+.t-stub{border-left:2px dashed var(--ink)}
+.t-stub::before,.t-stub::after{background:var(--sage);border:2px solid var(--ink)}
+.ticket .pill:not(.soon){background:var(--ink);color:var(--paper)}
+.footer{color:var(--ink)}
+.chips span{border-color:var(--ink)}
+.footer-quote{font-family:"Hand";color:var(--red);text-transform:uppercase;font-size:clamp(28px,8vw,40px);
+  -webkit-text-stroke:.5px var(--red);text-align:center;line-height:1.05;margin:40px 0 4px}
+
+/* Kopf wie die Story: Logo, AFTERS, große Infos, Tänzer darunter */
+.bw-logo{width:58%;max-width:400px;margin:2% auto 0}
+.afters-word{width:74%;max-width:440px;margin:8px auto 14px}
+.sale-big{text-align:center;margin:0 auto 6px;max-width:560px}
+.sb-hand{font-family:"Hand";color:var(--red);text-transform:uppercase;-webkit-text-stroke:.6px var(--red);
+  font-size:clamp(40px,12.4vw,70px);line-height:1.05;letter-spacing:.01em}
+.sb-hand .sb-2{font-size:1.18em}
+.sb-rule{border:0;border-top:1.5px solid var(--ink);width:88%;margin:12px auto 12px}
+.sb-tw{font-family:"Typewriter",monospace;letter-spacing:.18em;text-transform:uppercase;font-size:clamp(13px,4vw,18px);color:var(--ink);line-height:1.6}
+.sb-tw.sm{font-size:clamp(10.5px,3.1vw,14px);letter-spacing:.12em}
+.dance{max-width:470px;width:84%;margin:8px auto 0}
 </style>
 </head>
 <body>
@@ -409,6 +477,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <img class="f-yellow" src="fig-yellow.png" alt="">
       <img class="f-orange" src="fig-orange.png" alt="">
     </div></div>
+    <img class="afters-word" src="afters.png" alt="AFTERS">
+    <div class="sale-big">
+      <p class="sb-hand" id="sbHand"><span id="sbL1">Tickets ab</span><br><span class="sb-2" id="sbL2">20.11. · 10 Uhr</span></p>
+      <hr class="sb-rule">
+      <p class="sb-tw">31.12.2026 · 23:59 – 6:00</p>
+      <p class="sb-tw sm">Otto-Ernst-Str. 32 · Hamburg · 18+</p>
+    </div>
+    <div class="dance"><video src="tanz.mp4" poster="tanz.jpg" autoplay muted loop playsinline preload="auto" aria-label="Drei Figuren tanzen auf DJ-Pulten: and through it all we will dance"></video></div>
     <a class="scroll-hint mono" href="#tickets">↓ Tickets</a>
     <div class="marquee" aria-hidden="true"><div class="mono" id="mq"></div></div>
 
@@ -486,6 +562,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
     
 
+    <p class="footer-quote">And through it all<br>we will dance</p>
     <footer class="footer">
       <span>→ ZWO-AFTERS · Otto-Ernst-Straße 32, Hamburg</span>
       <div class="chips"><span>ZWO-AFTERS</span><span>31.12</span><span>23.59</span><span>18+</span></div>
@@ -634,7 +711,7 @@ if (!TICKETS_ON_SALE) {
   document.querySelectorAll("[data-ticket]").forEach(b => { b.textContent = "Bald"; b.classList.add("soon"); b.tabIndex = -1; });
   document.querySelectorAll("[data-price]").forEach(el => el.textContent = "31.12.2026");   // Preise noch nicht zeigen
   document.querySelectorAll(".t-sub").forEach(el => el.textContent = el.textContent.replace("31.12.2026 · ", ""));
-  document.querySelector(".scroll-hint").textContent = "↓ Tickets ab 20.11. · 10 Uhr";
+  document.querySelector(".scroll-hint").textContent = "↓ Tickets";
   document.querySelectorAll(".t-small").forEach(el => el.textContent = el.textContent.replace(" · zzgl. 1,25 € Gebühr", ""));   // Gebühr erst ab Verkaufsstart zeigen
   // Countdown bis Verkaufsstart – bei 0 lädt die Seite neu und zeigt die Tickets
   const pad = n => String(n).padStart(2, "0");
@@ -651,6 +728,8 @@ if (!TICKETS_ON_SALE) {
 } else {
   $("notify").remove();
   $("saleNote").remove();
+  $("sbL1").textContent = "Tickets";
+  $("sbL2").textContent = "jetzt online";
 }
 
 $("notifyForm") && $("notifyForm").addEventListener("submit", async e => {
