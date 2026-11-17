@@ -568,7 +568,13 @@ const SHOP_URL = "https://buytickets.at/zwoafters/2537258";
 //                     true  = Buy-now-Buttons aktiv
 // Schaltet sich automatisch am 20.11.2026 um 10:00 Uhr (deutsche Zeit) frei
 const SALE_START = Date.parse("2026-11-20T10:00:00+01:00");
-const TICKETS_ON_SALE = Date.now() >= SALE_START;
+// TESTFENSTER: nur in diesen 5 Minuten kann man schon kaufen, danach wieder Countdown
+const TEST_START = Date.parse("2026-11-17T16:00:00+01:00");
+const TEST_END   = TEST_START + 5*60*1000;
+const IN_TEST = Date.now() >= TEST_START && Date.now() < TEST_END;
+const TICKETS_ON_SALE = Date.now() >= SALE_START || IN_TEST;
+// Seite schaltet sich zu Beginn und Ende des Testfensters von selbst um
+[TEST_START, TEST_END].forEach(t => { const d = t - Date.now(); if (d > 0 && d < 6*3600*1000) setTimeout(() => location.reload(), d + 500); });
 
 // Adresse des Anmeldeformulars beim Newsletter-Dienst (z. B. Brevo).
 // Leer lassen, solange der Dienst noch nicht eingerichtet ist.
