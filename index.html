@@ -399,6 +399,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .rz-imp{margin-top:22px;text-align:center;font-size:9px;line-height:1.45;letter-spacing:0;opacity:.75}
 .rz-imp b{font-weight:600}
 .rz-imp a{color:inherit;text-decoration:none}
+
+@font-face{font-family:"Reenie";src:url("reenie.woff2") format("woff2");font-display:swap}
+.rz-note{position:relative;z-index:4;width:max-content;max-width:100%;margin:26px auto 30px;padding:14px 26px 10px;background:#f2efe6;color:#7a2323;
+  font-family:"Reenie",cursive;font-size:clamp(34px,10.5vw,52px);line-height:1.05;text-align:center;letter-spacing:.02em;-webkit-text-stroke:.2px #7a2323;
+  transform:rotate(-2.5deg);box-shadow:0 6px 18px rgba(0,0,0,.18);border-radius:2px}
 </style>
 <link rel="preload" as="image" href="bg0.jpg"><link rel="preload" as="image" href="bg1.jpg"><link rel="preload" as="image" href="bg2.jpg"><link rel="preload" as="image" href="bg3.jpg"><link rel="preload" as="image" href="bg4.jpg"><link rel="preload" as="image" href="bg5.jpg">
 </head>
@@ -485,6 +490,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     </div>
     <div class="rz-big" aria-hidden="true"><div>after</div><div class="b2">party</div></div>
     <div class="rz-list" id="tickets">Einlass ab 23:59<br>18+ · Ausweis mitbringen<br>Einlass bis 1:00<sup>(Early Bird)</sup><br>Ein Ticket pro Person<br>Name auf dem Ticket<br>QR-Code am Einlass</div>
+    <p class="rz-note" aria-label="and through it all we will dance">and through it all<br>we will dance</p>
     <p class="rz-hidden"><span id="saleNote"></span></p>
     <a class="scroll-hint" href="#tixHead">↓ Tickets</a>
     <div class="marquee" aria-hidden="true" hidden><div id="mq"></div></div>
