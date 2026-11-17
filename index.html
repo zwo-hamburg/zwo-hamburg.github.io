@@ -8,9 +8,6 @@
 <meta name="theme-color" content="#080808" id="themeColor">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
-<!-- pretix (Ticketshop) -->
-<link rel="stylesheet" type="text/css" href="https://pretix.eu/ZWO/SILVESTER/widget/v2.css" crossorigin>
-<script type="text/javascript" src="https://pretix.eu/widget/v2.de.js" async crossorigin></script>
 <style>
 /* ==================================================================
    FARBEN
@@ -504,7 +501,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <div class="step" id="step2">
       <h3>Zahlung</h3>
       <div class="summary"><div><div id="sumName2"></div><div class="who" id="who"></div></div><b id="sumPrice2"></b></div>
-      <p class="lead">Im nächsten Schritt wählst du <b>PayPal</b> oder <b>Kreditkarte</b> und bezahlst sicher über unseren Ticketpartner pretix. Dein Ticket mit QR-Code kommt danach per E-Mail.</p>
+      <p class="lead">Im nächsten Schritt wählst du <b>PayPal</b> oder <b>Kreditkarte</b> und bezahlst sicher über unseren Ticketpartner. Dein Ticket mit QR-Code kommt danach per E-Mail.</p>
       <div class="actions">
         <button class="pill" id="back2" aria-label="Zurück">←</button>
         <button class="pill solid wide" id="payBtn">Jetzt bezahlen</button>
@@ -517,13 +514,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <script>
 /* ==================================================================
-   EINSTELLUNGEN – Ticketshop (pretix)
+   EINSTELLUNGEN – Ticketshop (Ticket Tailor)
    ================================================================== */
-const SHOP_URL = "https://pretix.eu/ZWO/SILVESTER/";
+const SHOP_URL = "https://buytickets.at/zwoafters/2537258";
 
 // Verkauf gestartet?  false = "Noch nicht im Verkauf" + E-Mail-Benachrichtigung
 //                     true  = Buy-now-Buttons aktiv
-const TICKETS_ON_SALE = false;
+const TICKETS_ON_SALE = true;
 
 // Adresse des Anmeldeformulars beim Newsletter-Dienst (z. B. Brevo).
 // Leer lassen, solange der Dienst noch nicht eingerichtet ist.
@@ -599,7 +596,8 @@ function openSheet(key){
   setTimeout(()=>$("inName").focus({preventScroll:true}), 450);
 }
 function closeSheet(){ sheet.classList.remove("show"); sheet.setAttribute("aria-hidden","true"); $("payNote").hidden = true; }
-document.querySelectorAll("[data-ticket]").forEach(b => b.addEventListener("click", () => openSheet(b.dataset.ticket)));
+// Buy now: direkt zum Ticketshop (Ticket Tailor) – dort Name, E-Mail und Zahlung
+document.querySelectorAll("[data-ticket]").forEach(b => b.addEventListener("click", () => { if (TICKETS_ON_SALE) location.href = SHOP_URL; }));
 $("closeSheet").addEventListener("click", closeSheet);
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
 addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
