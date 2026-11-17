@@ -208,6 +208,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .notify form{max-width:460px}
 .notify-small{font-size:10.5px;line-height:1.45;color:#666;margin-top:10px}
 .notify-msg{font-size:11px;letter-spacing:.06em;margin-top:10px;min-height:1em}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:460px;margin:6px 0 8px}
+.cd div{border:1px solid #000;text-align:center;padding:10px 4px 8px;background:#fff}
+.cd b{display:block;font-size:clamp(30px,9vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.cd span{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;margin-top:6px}
+.cd-when{font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 16px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .pill.soon{opacity:.45;cursor:default;pointer-events:none}
 .badge-txt{color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;text-align:center;line-height:1.3}
@@ -415,6 +420,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <section class="notify" id="notify">
       <p class="notify-tag mono">Noch nicht im Verkauf</p>
       <h2>Tickets gibt es bald.</h2>
+      <div class="cd" id="cd" aria-live="off">
+        <div><b id="cdD">00</b><span class="mono">Tage</span></div>
+        <div><b id="cdH">00</b><span class="mono">Std</span></div>
+        <div><b id="cdM">00</b><span class="mono">Min</span></div>
+        <div><b id="cdS">00</b><span class="mono">Sek</span></div>
+      </div>
+      <p class="cd-when mono">Verkauf ab 20.11. · 10 Uhr</p>
       <p class="notify-tag mono" style="margin:0 0 10px;background:#fff;color:#000;border:1px solid #000">ZWO-AFTERS · 18+</p>
       <p class="notify-text">Trag deine E-Mail-Adresse ein – wir schreiben dir, sobald die Tickets online sind.</p>
       <form id="notifyForm" novalidate>
@@ -622,7 +634,20 @@ if (!TICKETS_ON_SALE) {
   document.querySelectorAll("[data-ticket]").forEach(b => { b.textContent = "Bald"; b.classList.add("soon"); b.tabIndex = -1; });
   document.querySelectorAll("[data-price]").forEach(el => el.textContent = "31.12.2026");   // Preise noch nicht zeigen
   document.querySelectorAll(".t-sub").forEach(el => el.textContent = el.textContent.replace("31.12.2026 · ", ""));
-  document.querySelector(".scroll-hint").textContent = "↓ Tickets bald";
+  document.querySelector(".scroll-hint").textContent = "↓ Tickets ab 20.11. · 10 Uhr";
+  document.querySelectorAll(".t-small").forEach(el => el.textContent = el.textContent.replace(" · zzgl. 1,25 € Gebühr", ""));   // Gebühr erst ab Verkaufsstart zeigen
+  // Countdown bis Verkaufsstart – bei 0 lädt die Seite neu und zeigt die Tickets
+  const pad = n => String(n).padStart(2, "0");
+  const tick = () => {
+    const left = SALE_START - Date.now();
+    if (left <= 0) { location.reload(); return; }
+    const sec = Math.floor(left / 1000);
+    $("cdD").textContent = pad(Math.floor(sec / 86400));
+    $("cdH").textContent = pad(Math.floor(sec % 86400 / 3600));
+    $("cdM").textContent = pad(Math.floor(sec % 3600 / 60));
+    $("cdS").textContent = pad(sec % 60);
+  };
+  tick(); setInterval(tick, 1000);
 } else {
   $("notify").remove();
   $("saleNote").remove();
