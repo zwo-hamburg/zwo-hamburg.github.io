@@ -181,6 +181,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 #shop.show{clip-path:circle(150vmax at var(--cx,50%) var(--cy,50%));visibility:visible;
   transition:clip-path .9s cubic-bezier(.7,0,.2,1),visibility 0s}
+#shop.show.done{clip-path:none;
+  transition:clip-path .9s cubic-bezier(.7,0,.2,1),visibility 0s}
 .wrap{max-width:980px;margin:0 auto;padding:0 20px}
 .mono{font-family:"Typewriter",monospace}
 
@@ -330,11 +332,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    ================================================================== */
 @font-face{font-family:"Any";src:url("Anybody.ttf") format("truetype");font-weight:100 900;font-stretch:50% 150%;font-display:swap}
 #shop{--g:#28965a;--w:#fafaf6;--paper:#f6f1e4;--deep:#163d27;background:var(--g);color:var(--w);font-family:"Inter",system-ui,sans-serif;letter-spacing:-.03em;isolation:isolate}
-.rz-ink{position:fixed;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:url(ink0.jpg) center/cover;
-  animation:boil 1.2s steps(1) infinite}
-@keyframes boil{0%{background-image:url(ink0.jpg)}16.66%{background-image:url(ink1.jpg)}33.33%{background-image:url(ink2.jpg)}
-  50%{background-image:url(ink3.jpg)}66.66%{background-image:url(ink4.jpg)}83.33%{background-image:url(ink5.jpg)}}
-@media (prefers-reduced-motion:reduce){.rz-ink{animation:none}}
+.rz-page{position:relative;min-height:100%}
+.rz-ink{position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;
+  background:url(ink-tile.jpg) center top/100% auto repeat-y}
+@media(min-width:700px){.rz-ink{background-size:700px auto}}
 #shop .nav{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;position:relative}
 #shop .back-btn{color:var(--w)}
 #shop .nav-links span.age{border-color:var(--w)}
@@ -380,7 +381,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 #shop .ticket .pill{border:0;border-radius:99px;padding:12px 20px;font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none;
   background:var(--deep);color:var(--paper);cursor:pointer}
 #shop .ticket .pill.soon{opacity:.55}
-#shop .t-stub{width:58px;border-left:2px dashed var(--deep);background:url(ink2.jpg) 30% 40%/600px auto;display:flex;align-items:center;justify-content:center;padding:0}
+#shop .t-stub{width:58px;border-left:2px dashed var(--deep);background:url(ink-tile.jpg) 30% 40%/600px auto;display:flex;align-items:center;justify-content:center;padding:0}
 #shop .t-stub::before,#shop .t-stub::after{content:none}
 #shop .t-stub span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:"Any";font-weight:900;font-stretch:50%;font-size:32px;color:var(--deep);letter-spacing:.01em}
 .rz-foot{margin:44px 0 0;padding-bottom:calc(30px + var(--safe-b))}
@@ -454,7 +455,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 </main>
 
 <!-- ========================= 2) TICKET-SEITE ========================= -->
-<section id="shop" aria-hidden="true">
+<section id="shop" aria-hidden="true"><div class="rz-page">
   <div class="rz-ink" aria-hidden="true"></div>
   <header class="nav">
     <div class="wrap">
@@ -487,18 +488,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
         <div><b id="cdS">00</b><span>Sek</span></div>
       </div>
       <p class="cd-when">Verkauf ab 20.11. · 10 Uhr</p>
-      <p class="notify-text">Trag deine E-Mail-Adresse ein – wir schreiben dir, sobald die Tickets online sind.</p>
-      <form id="notifyForm" novalidate>
-        <label class="field" id="fNotify"><span>E-Mail-Adresse</span>
-          <input id="notifyMail" name="EMAIL" type="email" autocomplete="email" inputmode="email" placeholder="max@beispiel.de" required>
-        </label>
-        <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
-        <input type="hidden" name="locale" value="de">
-        <input type="hidden" name="html_type" value="simple">
-        <button class="rz-btn" type="submit" id="notifyBtn">Benachrichtige mich</button>
-        <p class="notify-small">Wir nutzen deine Adresse nur, um dir Bescheid zu geben, wenn die Tickets online sind. Abmelden geht jederzeit.</p>
-        <p class="notify-msg" id="notifyMsg" role="status"></p>
-      </form>
     </section>
 
     <h2 class="rz-h2" id="tixHead">Tickets</h2>
@@ -536,7 +525,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <img src="logo-w.png" alt="ZWO">
     </footer>
   </div>
-</section>
+</div></section>
 
 <!-- ========================= 3) KAUF-FENSTER ========================= -->
 <div class="sheet" id="sheet" aria-hidden="true">
@@ -623,12 +612,12 @@ $("toShop").addEventListener("click", e => {
   lastX = (r.left + r.width/2) + "px"; lastY = (r.top + r.height/2) + "px";
   shop.style.setProperty("--cx", lastX); shop.style.setProperty("--cy", lastY);
   shop.scrollTop = 0;
-  shop.classList.add("show"); shop.setAttribute("aria-hidden","false");
+  shop.classList.add("show"); shop.setAttribute("aria-hidden","false"); setTimeout(()=>shop.classList.add("done"), 950);
   $("themeColor").content = "#28965a";
 });
 $("backBtn").addEventListener("click", () => {
   shop.style.setProperty("--cx", "40px"); shop.style.setProperty("--cy", "40px");
-  shop.classList.remove("show"); shop.setAttribute("aria-hidden","true");
+  shop.classList.remove("done"); void shop.offsetWidth; shop.classList.remove("show"); shop.setAttribute("aria-hidden","true");
   $("themeColor").content = "#080808";
 });
 
